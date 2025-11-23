@@ -25,7 +25,7 @@ export const LandingPage: React.FC = () => {
 
             {/* Auth Buttons */}
             <div className="flex items-center gap-3">
-              <a href="/login" className="hidden md:inline-flex text-sm font-semibold text-gray-900 hover:text-[#f27e31] transition-colors">
+              <a href="/login" className="inline-flex text-sm font-semibold text-gray-900 hover:text-[#f27e31] transition-colors">
                 Sign in
               </a>
               <a 
