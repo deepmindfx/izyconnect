@@ -76,7 +76,7 @@ export const LandingPage: React.FC = () => {
               <ChevronRight className="w-4 h-4" />
             </a>
             <a 
-              href="https://xgvxtnvdxqqeehjrvkwr.supabase.co/storage/v1/object/public/asuktek/AsukTek.apk" 
+              href="https://hiwmmbcmkassewoobxgx.supabase.co/storage/v1/object/public/conetsmart/ConetSmart.apk" 
               download
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all"
             >
@@ -142,7 +142,7 @@ export const LandingPage: React.FC = () => {
               </p>
               <div className="flex flex-wrap gap-4">
                 <a 
-                  href="https://xgvxtnvdxqqeehjrvkwr.supabase.co/storage/v1/object/public/asuktek/AsukTek.apk" 
+                  href="https://hiwmmbcmkassewoobxgx.supabase.co/storage/v1/object/public/conetsmart/ConetSmart.apk" 
                   download
                   className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-white hover:bg-gray-50 transition-colors text-gray-900 font-semibold"
                 >
