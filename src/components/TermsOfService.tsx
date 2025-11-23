@@ -70,7 +70,7 @@ export const TermsOfService: React.FC = () => {
           </p>
           <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <p className="font-semibold text-gray-900">ConetSmart</p>
-            <p>Behind Sabon Layi Round About</p>
+            <p>26 church Street, Idumota, Lagos Island, Lagos.</p>
             <p>Phone: 08033707947, 08036506511</p>
           </div>
         </div>

@@ -181,7 +181,7 @@ export const LandingPage: React.FC = () => {
             <div>
               <h4 className="font-bold text-gray-900 mb-4">Contact Us</h4>
               <ul className="space-y-3 text-sm text-gray-600">
-                <li>ConetSmart behind sabon layi behind sabon layi round about</li>
+                <li>26 church Street, Idumota, Lagos Island, Lagos.</li>
                 <li><a href="tel:08033707947" className="hover:text-[#f27e31]">08033707947</a></li>
                 <li><a href="tel:08036506511" className="hover:text-[#f27e31]">08036506511</a></li>
               </ul>
