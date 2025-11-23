@@ -23,9 +23,9 @@ export const LandingPage: React.FC = () => {
       <header className="max-w-6xl mx-auto px-5 pt-6 pb-3 flex items-center justify-between" role="banner" aria-label="Site header">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#34A853] to-[#2E7D32] flex items-center justify-center shadow-lg border border-white/10">
-            <img src="/starline-logo.png" alt="AsukTek" className="w-6 h-6 object-contain" />
+            <img src="/starline-logo.png" alt="ConetSmart" className="w-6 h-6 object-contain" />
           </div>
-          <span className="text-xl font-bold tracking-tight">AsukTek</span>
+          <span className="text-xl font-bold tracking-tight">ConetSmart</span>
         </div>
         <nav className="hidden md:flex items-center gap-6 text-sm" aria-label="Primary">
           <a href="#features" className="text-white/80 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded-md px-1">Services</a>
@@ -56,7 +56,7 @@ export const LandingPage: React.FC = () => {
               Wi‑Fi plans, wallet, and virtual accounts—simplified.
             </h1>
             <p className="text-white/80 mt-4 leading-relaxed max-w-[60ch] mx-auto md:mx-0">
-              AsukTek lets you purchase flexible Wi‑Fi plans, fund a smart wallet, and receive
+              ConetSmart lets you purchase flexible Wi‑Fi plans, fund a smart wallet, and receive
               payments via your own virtual bank account. Top‑up instantly, transfer securely,
               and track usage—all in one place.
             </p>
@@ -104,7 +104,7 @@ export const LandingPage: React.FC = () => {
           <div className="bg-white/5 border border-white/10 rounded-3xl p-6 text-center">
             <h2 className="text-white font-bold text-sm mb-2">Contact</h2>
             <div className="text-sm text-white/85 space-y-2">
-              <p className="font-semibold">AsukTek behind sabon layi behind sabon layi round about</p>
+              <p className="font-semibold">ConetSmart behind sabon layi behind sabon layi round about</p>
               <p>
                 Phone: <a href="tel:08033707947" className="font-semibold text-white hover:underline">08033707947</a>, <a href="tel:08036506511" className="font-semibold text-white hover:underline">08036506511</a>
               </p>
@@ -114,7 +114,7 @@ export const LandingPage: React.FC = () => {
 
         {/* Footer */}
         <footer className="mt-10 text-center text-xs text-white/60" role="contentinfo">
-          © {new Date().getFullYear()} AsukTek. All rights reserved.
+          © {new Date().getFullYear()} ConetSmart. All rights reserved.
         </footer>
       </main>
     </div>

@@ -497,7 +497,7 @@ const NotificationForm: React.FC<NotificationFormProps> = ({
               label="Title"
               value={formData.title}
               onChange={(value) => setFormData({ ...formData, title: value })}
-              placeholder="e.g., Welcome to AsukTek!"
+              placeholder="e.g., Welcome to ConetSmart!"
               required
             />
 
