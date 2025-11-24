@@ -46,8 +46,19 @@ export const LandingPage: React.FC = () => {
 
       {/* Hero Section */}
       <section className="pt-32 pb-16 md:pt-48 md:pb-32 px-4 relative overflow-hidden">
+        {/* Background Image & Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/modernbg.jpg" 
+            alt="Background" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-white/90 backdrop-blur-sm"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-white/50 via-transparent to-white"></div>
+        </div>
+
         {/* Background Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none z-0">
           <div className="absolute top-20 left-10 w-72 h-72 bg-orange-200/30 rounded-full blur-3xl animate-pulse delay-700"></div>
           <div className="absolute top-40 right-10 w-96 h-96 bg-[#f27e31]/10 rounded-full blur-3xl animate-pulse"></div>
         </div>
