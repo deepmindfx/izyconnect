@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useData } from '../../contexts/DataContext';
-import { useNetworkStatus } from '../../hooks/useNetworkStatus';
-import { WalletCard } from './WalletCard';
 import { RecentTransactions } from './RecentTransactions';
 
 import { PlansList } from './PlansList';
@@ -12,47 +10,19 @@ import { ReferralPage } from './ReferralPage';
 import { SettingsPage } from './SettingsPage';
 import { NotificationBanner } from './NotificationBanner';
 import { TransferModal } from './TransferModal';
-import { Bell, ChevronDown, LogOut, Eye, EyeOff, Copy, Smartphone, CreditCard, ArrowUpRight, Clock, Send, TrendingUp } from 'lucide-react';
+import { Bell, ChevronDown, Smartphone, CreditCard, ArrowUpRight, Clock, Send, TrendingUp, Moon, Sun, Zap, Globe, Share2, MoreHorizontal, HelpCircle, User, Eye, EyeOff } from 'lucide-react';
 
-type ActivePage = 'home' | 'plans' | 'referrals' | 'settings' | 'virtual-account';
+type ActivePage = 'home' | 'plan' | 'rewards' | 'settings' | 'menu' | 'virtual-account';
 
 export const UserDashboard: React.FC = () => {
   const [activePage, setActivePage] = useState<ActivePage>('home');
-  const { user, refreshSession, logout } = useAuth();
-  const { getUserPurchases, refreshData } = useData();
+  const [darkMode, setDarkMode] = useState(false);
+  const { user, logout, refreshSession } = useAuth();
+  const { refreshData } = useData();
 
-  const handleLogout = async () => {
-    try {
-      console.log('User logout clicked - clearing session...');
-      await logout();
-    } catch (error) {
-      console.error('Error during user logout:', error);
-      // Force redirect even if logout fails
-      window.location.replace('/login');
-    }
-  };
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const { isOnline, isSlow } = useNetworkStatus();
+  // const { isOnline, isSlow } = useNetworkStatus(); // Can use later for banner
   const [showBalance, setShowBalance] = useState(true);
-  const [copied, setCopied] = useState(false);
   const [showTransferModal, setShowTransferModal] = useState(false);
-
-  // Remove the activation logic - we'll show recent transactions instead
-
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    try {
-      // Refresh both auth session and data
-      await Promise.all([
-        refreshSession(),
-        refreshData()
-      ]);
-    } catch (error) {
-      console.error('Refresh failed:', error);
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
 
   const renderContent = () => {
     switch (activePage) {
@@ -61,227 +31,148 @@ export const UserDashboard: React.FC = () => {
           <div className="space-y-6">
             <NotificationBanner />
 
-            {/* Premium Wallet Card */}
-            <div className="mx-4 relative">
-              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100/50">
-                {/* Balance Section */}
-                <div className="px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-br from-gray-50/50 to-white">
-                  <div className="mb-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-gray-600 text-sm font-medium">Available Balance</p>
-                      <button
-                        onClick={() => setShowBalance(!showBalance)}
-                        className="p-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-200"
-                        title={showBalance ? 'Hide balance' : 'Show balance'}
-                      >
-                        {showBalance ? <Eye size={16} className="text-gray-600" /> : <EyeOff size={16} className="text-gray-600" />}
-                      </button>
+            {/* Redesigned Balance Card (Split Layout) */}
+            <div className="mx-4">
+              <div className={`rounded-3xl p-5 shadow-lg relative overflow-hidden transition-colors duration-300 ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-gray-100'}`}>
+                {/* Header Strip */}
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100/10">
+                  <div className="flex items-center gap-2">
+                    <span className={`text-sm font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{user?.virtualAccountNumber || '09063412927'}</span>
+                    <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>|</span>
+                    <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>IzyConnect</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[#FFCC00] text-sm font-medium cursor-pointer" onClick={() => setActivePage('plan')}>
+                    Pulse <ChevronDown size={14} className="-rotate-90" />
+                  </div>
+                </div>
+
+                {/* Split Balance Area */}
+                <div className="flex relative">
+                  {/* Left Half: Main Wallet */}
+                  <div className="flex-1 pr-4 border-r border-gray-100/10">
+                    <div className="flex items-center gap-1.5 mb-2 cursor-pointer" onClick={() => setShowBalance(!showBalance)}>
+                      <CreditCard size={14} className={darkMode ? 'text-gray-400' : 'text-gray-500'} />
+                      <span className={`text-xs font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Wallet Balance</span>
+                      {showBalance ? <Eye size={12} className={darkMode ? 'text-gray-500' : 'text-gray-400'} /> : <EyeOff size={12} className={darkMode ? 'text-gray-500' : 'text-gray-400'} />}
                     </div>
-                    <h2 className="text-2xl min-[320px]:text-3xl min-[375px]:text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">
-                      {showBalance
-                        ? `₦${(user?.walletBalance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                        : '₦****.**'}
-                    </h2>
+                    <h3 className="text-2xl font-extrabold text-[#EF4444] mb-1">
+                      {showBalance ? `₦${(user?.walletBalance || 0).toLocaleString()}` : '₦****'}
+                    </h3>
+                    <p className={`text-xs font-medium mb-4 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                      Bonus: ₦0
+                    </p>
+                    <button
+                      onClick={() => setActivePage('virtual-account')}
+                      className={`w-full py-2.5 rounded-full flex items-center justify-center gap-2 text-xs font-bold transition-all ${darkMode ? 'bg-zinc-800 text-white hover:bg-zinc-700' : 'bg-black text-white hover:bg-gray-800'}`}
+                    >
+                      <TrendingUp size={14} className="text-[#FFCC00]" /> Add Funds
+                    </button>
                   </div>
 
-                  {/* Account Details or Creation Prompt */}
-                  {user?.virtualAccountNumber ? (
-                    <div className="bg-gradient-to-r from-orange-50 to-orange-50 rounded-2xl p-3 sm:p-4 border border-orange-100 mb-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1 min-w-0 mr-3">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Smartphone size={14} className="text-[#FF5F00]" />
-                            <p className="text-orange-900 text-xs font-semibold">Virtual Account</p>
-                          </div>
-                          <p className="text-orange-800 font-mono text-sm font-bold tracking-wide mb-1 break-all">
-                            {user.virtualAccountNumber}
-                          </p>
-                          {user?.virtualAccountBankName && (
-                            <p className="text-orange-700 text-xs">
-                              <span className="font-medium">{user.virtualAccountBankName}</span>
-                            </p>
-                          )}
-                        </div>
-                        <button
-                          onClick={async () => {
-                            await navigator.clipboard.writeText(user.virtualAccountNumber as string);
-                            setCopied(true);
-                            setTimeout(() => setCopied(false), 2000);
-                          }}
-                          className="p-2.5 bg-[#FF5F00] hover:bg-[#E65000] text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 flex-shrink-0"
-                          title="Copy account number"
-                          aria-label="Copy account number"
-                        >
-                          <Copy size={18} className={copied ? 'text-white' : 'text-white'} />
-                        </button>
-                      </div>
+                  {/* Right Half: Data/Virtual Account */}
+                  <div className="flex-1 pl-4">
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <ArrowUpRight size={14} className={darkMode ? 'text-gray-400' : 'text-gray-500'} />
+                      <span className={`text-xs font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Virtual Account</span>
                     </div>
-                  ) : (
-                    <div
-                      className="bg-gradient-to-r from-orange-50 to-orange-50 rounded-2xl p-3 sm:p-4 border border-orange-200 hover:from-orange-100 hover:to-orange-100 cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md mb-3"
-                      onClick={() => setActivePage('virtual-account')}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActivePage('virtual-account'); } }}
-                      title="Setup virtual account"
-                      aria-label="Setup virtual account"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-[#FF5F00] to-[#FF8000] rounded-xl flex items-center justify-center shadow-lg">
-                            <Smartphone size={18} className="text-white" />
-                          </div>
-                          <div>
-                            <p className="text-orange-900 font-semibold text-sm mb-0.5">Setup Account</p>
-                            <p className="text-orange-800 text-xs">Enable instant deposits</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1 text-orange-900 font-semibold">
-                          <span className="text-xs">Setup</span>
-                          <ArrowUpRight size={16} className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-2 sm:gap-3">
+                    <h3 className={`text-xl font-bold mb-1 truncate ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      {user?.virtualAccountNumber ? 'Active' : 'Not Set'}
+                    </h3>
+                    <p className={`text-xs font-medium mb-4 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                      Bank: {user?.virtualAccountBankName || 'N/A'}
+                    </p>
                     <button
                       onClick={() => setShowTransferModal(true)}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-3 sm:py-3.5 bg-gradient-to-r from-[#FF5F00] to-[#FF8000] hover:from-[#E65100] hover:to-[#FF6D00] text-white rounded-2xl font-bold transition-all duration-200 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] text-xs sm:text-sm"
+                      className={`w-full py-2.5 rounded-full flex items-center justify-center gap-2 text-xs font-bold transition-all ${darkMode ? 'bg-zinc-800 text-white hover:bg-zinc-700' : 'bg-black text-white hover:bg-gray-800'}`}
                     >
-                      <Send size={14} />
-                      <span>Send</span>
-                    </button>
-                    <button
-                      onClick={() => setActivePage('virtual-account')}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 sm:py-3 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 text-xs sm:text-sm"
-                    >
-                      <TrendingUp size={14} />
-                      <span>Add Funds</span>
+                      <Send size={14} className="text-[#FFCC00]" /> Transfer
                     </button>
                   </div>
                 </div>
 
-                {/* Decorative Elements */}
-                <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-500/5 to-orange-500/5 rounded-full blur-2xl"></div>
+                <div className="mt-4 pt-3 border-t border-gray-100/10 text-center">
+                  <span className={`text-xs font-medium ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-800'} cursor-pointer transition-colors`}>View details</span>
+                </div>
+
+                {/* Background Texture */}
+                <div className={`absolute inset-0 -z-10 opacity-5 pointer-events-none ${darkMode ? 'bg-white' : 'bg-black'}`} style={{ backgroundImage: 'radial-gradient(circle at center, gray 1px, transparent 1px)', backgroundSize: '10px 10px' }}></div>
               </div>
             </div>
 
-
-            {/* Quick Actions removed as requested */}
-
-            {/* Upgrade Account - Redesigned */}
+            {/* Quick Actions Grid */}
             <div className="mx-4">
-              <div className="relative overflow-hidden bg-gradient-to-br from-[#FF5F00] via-[#FF8000] to-[#E65100] rounded-3xl p-6 shadow-xl shadow-orange-500/20">
-                {/* Background Pattern */}
-                <div className="absolute inset-0">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
-                  <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-white/5 rounded-full blur-xl"></div>
-                </div>
-
-                <div className="relative z-10 flex items-center justify-between max-[380px]:flex-col max-[380px]:items-start max-[380px]:gap-3">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg border border-white/30">
-                      <CreditCard size={26} className="text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-bold text-lg mb-1 max-[380px]:text-base">Upgrade Account</h3>
-                      <p className="text-white/90 text-sm max-[380px]:text-xs leading-relaxed">
-                        Create a virtual account to enjoy <span className="font-semibold">higher limits & faster funding</span>
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setActivePage('virtual-account')}
-                    className="bg-white/20 backdrop-blur-sm hover:bg-white/30 p-3 rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95 border border-white/30 shadow-lg max-[380px]:self-stretch max-[380px]:w-full max-[380px]:justify-center"
-                  >
-                    <ArrowUpRight size={22} className="text-white" />
-                  </button>
-                </div>
+              <div className="flex items-center justify-center gap-1.5 mb-4">
+                <div className={`w-1.5 h-1.5 rounded-full bg-[#FFCC00]`}></div>
+                <div className={`w-1.5 h-1.5 rounded-full ${darkMode ? 'bg-zinc-800' : 'bg-gray-300'}`}></div>
+                <div className={`w-1.5 h-1.5 rounded-full ${darkMode ? 'bg-zinc-800' : 'bg-gray-300'}`}></div>
+                <div className={`w-1.5 h-1.5 rounded-full ${darkMode ? 'bg-zinc-800' : 'bg-gray-300'}`}></div>
               </div>
-            </div>
 
-            {/* Recent Transactions - Redesigned */}
-            <div className="mx-4">
-              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-gray-50 to-orange-50 px-6 py-5 border-b border-gray-100 max-[380px]:px-4 max-[380px]:py-4">
-                  <div className="flex items-center justify-between max-[380px]:flex-col max-[380px]:items-start max-[380px]:gap-2">
-                    <div className="flex items-center space-x-3 max-[380px]:space-x-2">
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#FF5F00] to-[#FF8000] rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20 max-[380px]:w-9 max-[380px]:h-9">
-                        <Clock size={18} className="text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-gray-900 font-bold text-lg max-[380px]:text-base">Recent Transactions</h3>
-                        <p className="text-gray-600 text-sm max-[380px]:text-xs">Your latest activity</p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => setActivePage('settings')}
-                      className="text-[#f27e31] text-sm font-semibold hover:text-[#d96d2b] transition-colors flex items-center space-x-1 max-[380px]:text-xs"
-                    >
-                      <span>See all</span>
-                      <ArrowUpRight size={12} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-6">
-                  <RecentTransactions onNavigateToHistory={() => setActivePage('settings')} />
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Services - redesigned */}
-            <div className="mx-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Quick Services</h3>
-                <button
-                  onClick={() => setActivePage('plans')}
-                  className="text-[#f27e31] text-sm font-medium flex items-center gap-1"
-                >
-                  View all
-                  <ArrowUpRight size={16} className="text-[#FF5F00]" />
-                </button>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-4 gap-4">
                 {[
-                  { label: 'Hourly', color: 'bg-[#E3F2FD] text-[#1E88E5]', dot: 'bg-[#1E88E5]' },
-                  { label: 'Daily', color: 'bg-[#fff7ed] text-[#d96d2b]', dot: 'bg-[#d96d2b]' },
-                  { label: 'Weekly', color: 'bg-[#FFF3E0] text-[#EF6C00]', dot: 'bg-[#EF6C00]' },
-                ].map((item) => (
-                  <button
-                    key={item.label}
-                    onClick={() => setActivePage('plans')}
-                    className={`flex flex-col items-center justify-center p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100`}
-                  >
-                    <div className={`w-12 h-12 ${item.color} rounded-2xl flex items-center justify-center mb-3`}>
-                      <div className={`w-6 h-6 ${item.dot} rounded-full`}></div>
+                  { label: 'Airtime', icon: Smartphone, color: 'text-[#FFCC00]' },
+                  { label: 'Data', icon: Globe, color: 'text-[#FFCC00]' },
+                  { label: 'Betting', icon: Zap, color: 'text-[#FFCC00]' },
+                  { label: 'Cable', icon: Share2, color: 'text-[#FFCC00]' },
+                ].map((item, idx) => (
+                  <button key={idx} onClick={() => setActivePage('plan')} className="flex flex-col items-center gap-2 group">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-sm group-active:scale-95 ${darkMode ? 'bg-zinc-900 border border-zinc-800 shadow-none' : 'bg-black shadow-lg shadow-black/20'}`}>
+                      <item.icon size={20} className={item.color} />
                     </div>
-                    <span className="text-gray-800 text-sm font-semibold">{item.label}</span>
+                    <span className={`text-[10px] font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{item.label}</span>
+                  </button>
+                ))}
+                {[
+                  { label: 'History', icon: Clock, color: 'text-white' },
+                  { label: 'Referral', icon: User, color: 'text-white' },
+                  { label: 'Support', icon: HelpCircle, color: 'text-white' },
+                  { label: 'More', icon: MoreHorizontal, color: 'text-white' },
+                ].map((item, idx) => (
+                  <button
+                    key={idx + 4}
+                    onClick={() => {
+                      if (item.label === 'History') setActivePage('settings');
+                      else if (item.label === 'Referral') setActivePage('rewards');
+                      else setActivePage('settings');
+                    }}
+                    className="flex flex-col items-center gap-2 group"
+                  >
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-sm group-active:scale-95 ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-gray-100'}`}>
+                      <item.icon size={20} className={darkMode ? 'text-gray-300' : 'text-gray-700'} />
+                    </div>
+                    <span className={`text-[10px] font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{item.label}</span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Popular Plans */}
+            {/* Recent Transactions */}
             <div className="mx-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Popular Plans</h3>
-                <div className="text-orange-600 text-sm font-medium bg-orange-50 px-3 py-1 rounded-full">
-                  Save up to 20%
+              <div className={`rounded-3xl p-5 shadow-sm border ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-gray-100'}`}>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Recent Activity</h3>
+                  <button onClick={() => setActivePage('settings')} className="text-xs font-medium text-[#FFCC00]">See all</button>
                 </div>
+                <RecentTransactions onNavigateToHistory={() => setActivePage('settings')} />
               </div>
-              <PlansList onSeeAllClick={() => setActivePage('plans')} />
+            </div>
+
+            {/* Marketplace Header */}
+            <div className="flex items-center justify-between px-4 mt-2">
+              <div className={`h-[1px] flex-1 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
+              <span className={`px-4 text-xs font-medium ${darkMode ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-wider`}>Marketplace</span>
+              <div className={`h-[1px] flex-1 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
+            </div>
+
+            {/* Popular Plans - keeping logic but restyling container if needed */}
+            <div className="mx-4 pb-20">
+              <PlansList onSeeAllClick={() => setActivePage('plan')} />
             </div>
           </div >
         );
-      case 'plans':
+      case 'plan': // Changed from 'plans' to 'plan'
         return <PlansList showAll={true} />;
-      case 'referrals':
+      case 'rewards': // Changed from 'referrals' to 'rewards'
         return <ReferralPage />;
       case 'settings':
         return <SettingsPage />;
@@ -298,60 +189,66 @@ export const UserDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA]">
-      <div className="max-w-md mx-auto bg-[#F8F9FA] min-h-screen relative">
-        {/* Header */}
-        <div className="bg-gradient-to-br from-[#FF5F00] via-[#FF8000] to-[#E65100] px-3 sm:px-4 pt-8 sm:pt-14 pb-7 sm:pb-16 relative overflow-hidden rounded-b-[2.5rem] shadow-2xl shadow-orange-500/20">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 bg-white/10 rounded-b-3xl"></div>
+    <div className={`min-h-screen ${darkMode ? 'bg-black' : 'bg-gray-50'} transition-colors duration-300 font-sans`}>
+      <div className={`max-w-md mx-auto ${darkMode ? 'bg-black' : 'bg-gray-50'} min-h-screen relative pb-24`}>
 
-          {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-2xl"></div>
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-2xl"></div>
-
-          <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 sm:h-12 sm:w-12 bg-white rounded-xl flex items-center justify-center shadow-md">
-                  <img src="/starline-logo.png" alt="IzyConnect" className="h-7 w-7 sm:h-8 sm:w-8 object-contain" />
+        {/* Header Section - Reference Style */}
+        <div className={`px-4 pt-6 pb-2 ${darkMode ? 'bg-black' : 'bg-white'} sticky top-0 z-20`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-700'}`}>
+                  {user?.email?.[0].toUpperCase() || 'U'}
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-white/90 text-xs">Welcome</span>
-                  <span className="text-white font-semibold leading-tight">{user?.email?.split('@')[0] || 'User'}</span>
+                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-black"></div>
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1">
+                  <span className={`text-sm font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                    Y'ello, {user?.email?.split('@')[0] || 'User'}
+                  </span>
+                </div>
+                <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} font-medium`}>
+                  {user?.virtualAccountNumber || '09063412927'}
+                </div>
+                <div className={`mt-0.5 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium w-fit ${darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-700'}`}>
+                  <span className="mr-1">👑</span> Prestige Silver
                 </div>
               </div>
-              <div className="flex items-center gap-2 sm:gap-3">
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-1 sm:gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-white text-red-600 rounded-xl sm:rounded-2xl font-semibold shadow-sm border border-red-100 hover:bg-red-50 transition-all duration-200"
-                  title="Logout"
-                >
-                  <LogOut className="w-3 h-3 sm:w-4 sm:h-4" />
-                  <span className="text-xs sm:text-sm">Logout</span>
-                </button>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setDarkMode(!darkMode)}
+                className={`p-2 rounded-full transition-colors ${darkMode ? 'hover:bg-gray-800 text-white' : 'hover:bg-gray-100 text-gray-600'}`}
+              >
+                {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <div className="relative">
+                <Bell size={22} className={darkMode ? 'text-white' : 'text-gray-600'} />
+                <span className="absolute -top-1 -right-0.5 bg-[#FFCC00] text-black text-[10px] font-bold px-1 rounded-full min-w-[16px] text-center">
+                  4
+                </span>
               </div>
             </div>
           </div>
+        </div>
 
+        {/* Promo Banner */}
+        <div className="px-4 mt-4">
+          <div className="bg-[#FFF9C4] rounded-2xl p-4 flex items-center justify-between relative overflow-hidden">
 
-          {/* Network Status Indicator */}
-          {(!isOnline || isSlow) && (
-            <div className="mb-4 p-4 bg-white/20 backdrop-blur-sm rounded-2xl border border-white/30 relative z-10">
-              <div className="flex items-center gap-3 text-white text-sm font-medium">
-                {!isOnline ? (
-                  <>
-                    <div className="w-3 h-3 bg-red-400 rounded-full animate-pulse shadow-lg"></div>
-                    <span>You're offline. Some features may not work.</span>
-                  </>
-                ) : (
-                  <>
-                    <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse shadow-lg"></div>
-                    <span>Slow connection detected. Please be patient.</span>
-                  </>
-                )}
-              </div>
+            <div className="relative z-10 flex-1">
+              <p className="text-sm font-medium text-gray-900 leading-relaxed">
+                Get <span className="font-bold">3.2GB</span> for <span className="font-bold">₦1,000</span>. Valid for 2 days.
+              </p>
             </div>
-          )}
+            <button className="bg-[#FFCC00] text-black font-bold text-xs px-4 py-2 rounded-full shadow-sm whitespace-nowrap ml-2">
+              Claim
+            </button>
+            {/* Hot Deal Icon */}
+            <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-12 h-12 bg-red-500 rounded-full flex items-center justify-center opacity-10 scale-150"></div>
+          </div>
         </div>
 
         <main className="pb-40 min-h-[calc(100vh-200px)] max-[380px]:pb-36 max-[360px]:pb-32 max-[350px]:pb-28">
@@ -359,9 +256,10 @@ export const UserDashboard: React.FC = () => {
             <div className="min-h-[calc(100vh-300px)] max-[380px]:min-h-[calc(100vh-280px)] max-[360px]:min-h-[calc(100vh-260px)] max-[350px]:min-h-[calc(100vh-240px)]">
               {renderContent()}
             </div>
+            {/* Bottom Navigation */}
+            <BottomNavigation activePage={activePage} onPageChange={setActivePage} darkMode={darkMode} />
           </div>
         </main>
-        <BottomNavigation activePage={activePage} onPageChange={setActivePage} />
 
         {/* Transfer Modal */}
         <TransferModal

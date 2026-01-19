@@ -1,57 +1,81 @@
 import React from 'react';
-import { Home, Zap, Gift, User } from 'lucide-react';
+import { Home, Play, HelpCircle, MoreHorizontal, Grid } from 'lucide-react';
 
-type ActivePage = 'home' | 'plans' | 'referrals' | 'settings';
+type ActivePage = 'home' | 'plan' | 'rewards' | 'settings' | 'menu';
 
 interface BottomNavigationProps {
   activePage: ActivePage;
   onPageChange: (page: ActivePage) => void;
+  darkMode?: boolean;
 }
 
 export const BottomNavigation: React.FC<BottomNavigationProps> = ({
   activePage,
   onPageChange,
+  darkMode = false,
 }) => {
-  const navItems = [
-    { id: 'home' as ActivePage, icon: Home, label: 'Home' },
-    { id: 'plans' as ActivePage, icon: Zap, label: 'Plans' },
-    { id: 'referrals' as ActivePage, icon: Gift, label: 'Referrals' },
-    { id: 'settings' as ActivePage, icon: User, label: 'Profile' },
-  ];
-
   return (
-    <div className="fixed bottom-6 left-0 right-0 z-40 flex justify-center">
-      <div className="w-[90%] max-w-md">
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl px-6 py-4 shadow-2xl border border-gray-100/50">
-          <div className="flex items-center justify-between">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activePage === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => onPageChange(item.id)}
-                  className={`flex flex-col items-center transition-all duration-300 ${
-                    isActive ? 'scale-110' : 'hover:scale-105'
-                  }`}
-                >
-                  <div className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-[#f27e31] text-white shadow-lg shadow-orange-500/25' 
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                  }`}>
-                    <Icon size={20} />
-                  </div>
-                  <span className={`text-[10px] mt-1.5 font-medium transition-colors duration-300 ${
-                    isActive ? 'text-[#f27e31]' : 'text-gray-500'
-                  }`}>
-                    {item.label}
-                  </span>
-                </button>
-              );
-            })}
+    <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
+      <div className="w-full max-w-md pointer-events-auto relative">
+
+        {/* Curved Background SVG */}
+        <div className="absolute bottom-0 w-full drop-shadow-[0_-5px_10px_rgba(0,0,0,0.05)] text-transparent">
+          <svg viewBox="0 0 375 85" className={`w-full h-[85px] fill-current ${darkMode ? 'text-zinc-900' : 'text-white'}`} xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,20 C0,20 0,85 0,85 L375,85 L375,20 C375,8.954305 366.045695,0 355,0 L248.349,0 C234.792,0 231.139,5.228 221.411,14.653 C212.723,23.076 201.275,28 187.5,28 C173.725,28 162.277,23.076 153.589,14.653 C143.861,5.228 140.208,0 126.651,0 L20,0 C8.954305,0 0,8.954305 0,20 Z" />
+          </svg>
+        </div>
+
+        {/* Central Floating Button */}
+        <div className="absolute bottom-[35px] left-1/2 -translate-x-1/2 z-20">
+          <button
+            onClick={() => onPageChange('menu')}
+            className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-95 transition-all ${darkMode ? 'bg-[#FFCC00] shadow-yellow-500/20' : 'bg-[#FF5F00] shadow-orange-500/30'}`}
+          >
+            <Grid size={28} className={darkMode ? 'text-black' : 'text-white'} />
+          </button>
+        </div>
+
+        <div className="relative h-[85px] flex items-end pb-3 px-6 justify-between">
+          {/* Left Group */}
+          <div className="flex gap-8 mb-2 ml-2">
+            <button
+              onClick={() => onPageChange('home')}
+              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'home' ? (darkMode ? 'text-[#FFCC00]' : 'text-[#FF5F00]') : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
+            >
+              <Home size={22} fill={activePage === 'home' ? "currentColor" : "none"} />
+              <span className="text-[10px] font-medium">Home</span>
+            </button>
+            <button
+              onClick={() => onPageChange('plan')}
+              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'plan' ? (darkMode ? 'text-[#FFCC00]' : 'text-[#FF5F00]') : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
+            >
+              <Play size={22} fill={activePage === 'plan' ? "currentColor" : "none"} />
+              <span className="text-[10px] font-medium">Play</span>
+            </button>
+          </div>
+
+          {/* Spacer for center button */}
+          <div className="w-12"></div>
+
+          {/* Right Group */}
+          <div className="flex gap-8 mb-2 mr-2">
+            <button
+              onClick={() => onPageChange('rewards')}
+              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'rewards' ? (darkMode ? 'text-[#FFCC00]' : 'text-[#FF5F00]') : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
+            >
+              <HelpCircle size={22} />
+              <span className="text-[10px] font-medium">Help</span>
+            </button>
+            <button
+              onClick={() => onPageChange('settings')}
+              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'settings' ? (darkMode ? 'text-[#FFCC00]' : 'text-[#FF5F00]') : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
+            >
+              <MoreHorizontal size={22} />
+              <span className="text-[10px] font-medium">More</span>
+            </button>
           </div>
         </div>
+
       </div>
     </div>
   );
