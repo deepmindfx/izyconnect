@@ -14,11 +14,8 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FF5F00] to-[#CC4C00] flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
-                <img src="/starline-logo.png" alt="Logo" className="w-5 h-5 object-contain brightness-0 invert" />
-              </div>
-              <span className="text-lg font-bold tracking-tight text-gray-900">IzyConnect</span>
+            <div className="flex items-center">
+              <img src="/starline-logo.png" alt="Logo" className="h-10 w-auto object-contain" />
             </div>
 
             {/* Desktop Menu */}
@@ -181,11 +178,8 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-2">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FF5F00] to-[#CC4C00] flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
-                  <img src="/starline-logo.png" alt="Logo" className="w-5 h-5 object-contain brightness-0 invert" />
-                </div>
-                <span className="text-lg font-bold tracking-tight text-gray-900">IzyConnect</span>
+              <div className="flex items-center mb-4">
+                <img src="/starline-logo.png" alt="Logo" className="h-10 w-auto object-contain" />
               </div>
               <p className="text-gray-500 leading-relaxed max-w-xs">
                 Empowering you with fast, reliable internet connectivity. Join thousands of satisfied users today.
@@ -195,8 +189,8 @@ export const LandingPage: React.FC = () => {
             <div>
               <h4 className="font-bold text-gray-900 mb-4">Contact Us</h4>
               <ul className="space-y-3 text-sm text-gray-600">
-                <li>29 Olajunwon Street Tejuosho, Yaba, Lagos.</li>
-                <li><a href="tel:09122538412" className="hover:text-[#FF5F00]">09122538412</a></li>
+                <li>Your Business Address Here</li>
+                <li><a href="tel:+1234567890" className="hover:text-[#FF5F00]">+123 456 7890</a></li>
               </ul>
             </div>
 
