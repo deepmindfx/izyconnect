@@ -110,7 +110,7 @@ export const ReferralPage: React.FC = () => {
           )
           .reduce((a, b) => a + b, 0);
         setReferralEarnings(computed);
-      } catch {}
+      } catch { }
     })();
   }, [user, allUsers, allPurchases]);
 
@@ -124,11 +124,11 @@ export const ReferralPage: React.FC = () => {
           .eq('key', 'referral_share_base_url')
           .maybeSingle();
         if (data?.value) setReferralBaseUrl(data.value);
-      } catch {}
+      } catch { }
     })();
   }, []);
   const referralUrl = `${referralBaseUrl}?ref=${user?.referralCode}`;
-  
+
   // Calculate user's referral statistics
   const myReferrals = (Array.isArray(allUsers) ? allUsers : []).filter((u: any) => u.referredBy === user?.id);
   const myEarnings = referralEarnings;
@@ -181,7 +181,7 @@ export const ReferralPage: React.FC = () => {
       {/* Hero Section */}
       <div className="text-center space-y-3">
         <div className="w-24 h-24 mx-auto mb-2">
-          <img src="/starline-logo.png" alt="ConetSmart" className="w-full h-full object-contain" />
+          <img src="/starline-logo.png" alt="IzyConnect" className="w-full h-full object-contain" />
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
           Refer & Earn
@@ -243,8 +243,8 @@ export const ReferralPage: React.FC = () => {
             <p className="text-sm text-blue-800 font-semibold">Your earnings</p>
             <p className="text-xl text-[#b3521b] font-black">₦{myEarnings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           </div>
-          <Button 
-            onClick={requestPayout} 
+          <Button
+            onClick={requestPayout}
             disabled={!canRequestPayout || payoutRequesting}
             className="w-full sm:w-auto bg-gradient-to-r from-[#f27e31] to-[#b3521b] hover:from-[#d96d2b] hover:to-[#7c2d12] text-white font-bold px-6 py-3 rounded-2xl transition-all duration-200 shadow-sm hover:shadow"
           >
@@ -264,7 +264,7 @@ export const ReferralPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Referral Statistics</h2>
           <p className="text-gray-600">Track your referral success and earnings</p>
         </div>
-        
+
         {myReferrals.length > 0 ? (
           <div className="space-y-8">
             <div className="grid grid-cols-2 gap-4 max-[450px]:gap-3">
@@ -283,7 +283,7 @@ export const ReferralPage: React.FC = () => {
                 <p className="text-orange-100 font-semibold text-sm max-[450px]:text-xs">Total Earnings</p>
               </div>
             </div>
-            
+
             <div>
               <h3 className="font-bold text-xl max-[450px]:text-lg text-gray-900 mb-4 max-[450px]:mb-3 flex items-center gap-2">
                 <TrendingUp className="text-blue-600" size={24} />
@@ -293,7 +293,7 @@ export const ReferralPage: React.FC = () => {
                 {myReferrals.map((referredUser) => {
                   const userPurchases = allPurchases.filter(p => p.userId === referredUser.id);
                   const userEarnings = userPurchases.reduce((total, purchase) => total + (purchase.amount * 0.1), 0);
-                  
+
                   return (
                     <div key={referredUser.id} className="bg-white p-4 max-[450px]:p-3 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
                       <div className="flex justify-between items-center max-[450px]:flex-col max-[450px]:items-start max-[450px]:gap-2">
@@ -338,7 +338,7 @@ export const ReferralPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-2">How it Works</h2>
           <p className="text-gray-600">Simple steps to start earning with referrals</p>
         </div>
-        
+
         <div className="space-y-4">
           {/* Step 1 */}
           <div className="flex gap-4 items-start p-4 rounded-2xl border border-gray-100 bg-gray-50/60">
@@ -374,7 +374,7 @@ export const ReferralPage: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Consistent bottom spacing */}
       <div className="h-8"></div>
     </div>

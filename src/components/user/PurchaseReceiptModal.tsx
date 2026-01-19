@@ -15,7 +15,7 @@ interface PurchaseReceiptModalProps {
 export const PurchaseReceiptModal: React.FC<PurchaseReceiptModalProps> = ({ purchase, onClose }) => {
   const { plans, locations } = useData();
   const { user } = useAuth();
-  
+
   const plan = plans.find(p => p.id === purchase.planId);
   const location = locations.find(l => l.id === purchase.locationId);
 
@@ -26,7 +26,7 @@ export const PurchaseReceiptModal: React.FC<PurchaseReceiptModalProps> = ({ purc
     // Use A4 portrait, small margins, and compact scaling so content fits on one page
     const opt = {
       margin: [0.2, 0.2, 0.2, 0.2],
-      filename: `ConetSmart-Receipt-${purchase.id}.pdf`,
+      filename: `IzyConnect-Receipt-${purchase.id}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
@@ -71,7 +71,7 @@ export const PurchaseReceiptModal: React.FC<PurchaseReceiptModalProps> = ({ purc
         <div id="receipt-content" className="p-4 sm:p-6 text-xs sm:text-sm leading-tight space-y-3 sm:space-y-4 overflow-y-auto flex-1">
           {/* Header */}
           <div className="text-center mb-4 sm:mb-6">
-            <h1 className="text-xl sm:text-2xl font-bold text-orange-600 mb-1 sm:mb-2">ConetSmart</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-orange-600 mb-1 sm:mb-2">IzyConnect</h1>
             <p className="text-gray-600 text-xs sm:text-base">Internet Service Receipt</p>
             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mt-3 sm:mt-4 mb-1 sm:mb-2">
               <span className="text-orange-600 text-xl sm:text-2xl">✓</span>
@@ -86,7 +86,7 @@ export const PurchaseReceiptModal: React.FC<PurchaseReceiptModalProps> = ({ purc
                 <Wifi size={16} />
                 Plan Details
               </h3>
-               <div className="space-y-1 text-xs">
+              <div className="space-y-1 text-xs">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Plan:</span>
                   <span className="font-medium">{plan?.name || 'Unknown Plan'}</span>
@@ -171,13 +171,12 @@ export const PurchaseReceiptModal: React.FC<PurchaseReceiptModalProps> = ({ purc
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Status:</span>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    purchase.status === 'active' 
-                      ? 'bg-orange-100 text-orange-700' 
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${purchase.status === 'active'
+                      ? 'bg-orange-100 text-orange-700'
                       : purchase.status === 'expired'
-                      ? 'bg-red-100 text-red-700'
-                      : 'bg-gray-100 text-gray-700'
-                  }`}>
+                        ? 'bg-red-100 text-red-700'
+                        : 'bg-gray-100 text-gray-700'
+                    }`}>
                     {purchase.status.charAt(0).toUpperCase() + purchase.status.slice(1)}
                   </span>
                 </div>
@@ -203,8 +202,8 @@ export const PurchaseReceiptModal: React.FC<PurchaseReceiptModalProps> = ({ purc
 
             <div className="bg-yellow-50 p-3 rounded-lg">
               <p className="text-sm text-yellow-800">
-                <strong>Important:</strong> 
-                {purchase.status === 'pending' 
+                <strong>Important:</strong>
+                {purchase.status === 'pending'
                   ? ` Connect to WiFi network "${location?.wifiName}" and activate your plan from the home screen.`
                   : ` Make sure you're connected to the WiFi network "${location?.wifiName}" before using your credentials.`
                 } Keep this receipt for your records.

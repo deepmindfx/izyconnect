@@ -4,7 +4,7 @@ import { Wifi, Zap, Smartphone, Shield, Globe, ChevronRight, Download } from 'lu
 export const LandingPage: React.FC = () => {
   const handleDownloadClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    alert('Coming Soon! The ConetSmart app will be available for download shortly.');
+    alert('Coming Soon! The IzyConnect app will be available for download shortly.');
   };
 
   return (
@@ -15,42 +15,42 @@ export const LandingPage: React.FC = () => {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#f27e31] to-[#b3521b] flex items-center justify-center text-white">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FF5F00] to-[#CC4C00] flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
                 <img src="/starline-logo.png" alt="Logo" className="w-5 h-5 object-contain brightness-0 invert" />
               </div>
-              <span className="text-lg font-bold tracking-tight text-gray-900">ConetSmart</span>
+              <span className="text-lg font-bold tracking-tight text-gray-900">IzyConnect</span>
             </div>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-sm font-medium text-gray-600 hover:text-[#f27e31] transition-colors">Features</a>
-              <a href="#download" className="text-sm font-medium text-gray-600 hover:text-[#f27e31] transition-colors">Download App</a>
-              <a href="#contact" className="text-sm font-medium text-gray-600 hover:text-[#f27e31] transition-colors">Contact</a>
-      </div>
+              <a href="#features" className="text-sm font-medium text-gray-600 hover:text-[#FF5F00] transition-colors">Features</a>
+              <a href="#download" className="text-sm font-medium text-gray-600 hover:text-[#FF5F00] transition-colors">Download App</a>
+              <a href="#contact" className="text-sm font-medium text-gray-600 hover:text-[#FF5F00] transition-colors">Contact</a>
+            </div>
 
             {/* Auth Buttons */}
-        <div className="flex items-center gap-3">
-              <a href="/login" className="inline-flex text-sm font-semibold text-gray-900 hover:text-[#f27e31] transition-colors">
+            <div className="flex items-center gap-3">
+              <a href="/login" className="inline-flex text-sm font-semibold text-gray-900 hover:text-[#FF5F00] transition-colors">
                 Sign in
               </a>
-              <a 
-                href="/login" 
-                className="inline-flex items-center justify-center px-4 py-2 rounded-full text-sm font-semibold text-white bg-[#f27e31] hover:bg-[#d96d2b] transition-all shadow-lg shadow-orange-200 hover:shadow-orange-300 hover:-translate-y-0.5"
+              <a
+                href="/login"
+                className="inline-flex items-center justify-center px-4 py-2 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-[#FF5F00] to-[#FF8000] hover:from-[#E65100] hover:to-[#FF6D00] transition-all shadow-lg shadow-orange-500/30 hover:shadow-orange-500/40 hover:-translate-y-0.5"
               >
                 Get Started
               </a>
             </div>
           </div>
         </div>
-        </nav>
+      </nav>
 
       {/* Hero Section */}
       <section className="pt-32 pb-16 md:pt-48 md:pb-32 px-4 relative overflow-hidden">
         {/* Background Image & Overlay */}
         <div className="absolute inset-0 z-0">
-          <img 
-            src="/modernbg.jpg" 
-            alt="Background" 
+          <img
+            src="/modernbg.jpg"
+            alt="Background"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px]"></div>
@@ -59,39 +59,39 @@ export const LandingPage: React.FC = () => {
 
         {/* Background Gradients */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none z-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-orange-200/30 rounded-full blur-3xl animate-pulse delay-700"></div>
-          <div className="absolute top-40 right-10 w-96 h-96 bg-[#f27e31]/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-orange-400/20 rounded-full blur-3xl animate-pulse delay-700"></div>
+          <div className="absolute top-40 right-10 w-96 h-96 bg-[#FF5F00]/10 rounded-full blur-3xl animate-pulse"></div>
         </div>
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-gray-900 mb-6 leading-tight">
             Reliable high speed Internet <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f27e31] to-[#d96d2b]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5F00] to-[#FF9000]">
               made Easy!
             </span>
           </h1>
-          
+
           <p className="text-xl md:text-2xl font-semibold text-gray-700 mb-4 max-w-3xl mx-auto leading-relaxed">
             Simple, and affordable just for you!
           </p>
-          
+
           <p className="text-lg md:text-xl text-gray-600 mb-6 max-w-3xl mx-auto leading-relaxed">
-            Access Internet with the speed of Light, no down time, no poor network. Move with the speed of light use Conetsmart high speed internet today.
+            Access Internet with the speed of Light, no down time, no poor network. Move with the speed of light use IzyConnect high speed internet today.
           </p>
-          
+
           <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
             With flexible plans, manage your wallet, fund instantly, via virtual account and Stay connected on the go.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a 
-              href="/login" 
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-semibold text-white bg-[#f27e31] hover:bg-[#d96d2b] transition-all shadow-xl shadow-orange-200 hover:shadow-orange-300 hover:-translate-y-1"
+            <a
+              href="/login"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-semibold text-white bg-gradient-to-r from-[#FF5F00] to-[#FF8000] hover:from-[#E65100] hover:to-[#FF6D00] transition-all shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 hover:-translate-y-1"
             >
               Create Free Account
               <ChevronRight className="w-4 h-4" />
             </a>
-            <button 
+            <button
               onClick={handleDownloadClick}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer"
             >
@@ -106,9 +106,9 @@ export const LandingPage: React.FC = () => {
       <section id="features" className="py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Choose ConetSmart?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Choose IzyConnect?</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">Everything you need for seamless internet access, built into one powerful platform.</p>
-            </div>
+          </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -128,9 +128,9 @@ export const LandingPage: React.FC = () => {
                 desc: "Your data and transactions are protected with bank-grade security protocols."
               }
             ].map((feature, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center mb-6">
-                  <feature.icon className="w-6 h-6 text-[#f27e31]" />
+              <div key={idx} className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg hover:shadow-orange-500/5 hover:border-orange-100 transition-all duration-300 group">
+                <div className="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#FF5F00] group-hover:text-white transition-colors duration-300">
+                  <feature.icon className="w-6 h-6 text-[#FF5F00] group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
@@ -145,18 +145,18 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="bg-[#1a1a1a] rounded-[3rem] p-8 md:p-16 relative overflow-hidden">
             {/* Abstract Shapes */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#f27e31] opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF5F00] opacity-30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
             <div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-500 opacity-10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
 
             <div className="relative z-10 max-w-2xl">
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-                Get the ConetSmart App
+                Get the IzyConnect App
               </h2>
               <p className="text-gray-400 text-lg mb-8 leading-relaxed">
                 Manage your plans, check data usage, and top up your wallet on the go. Download our Android app today for the best experience.
               </p>
               <div className="flex flex-wrap gap-4">
-                <button 
+                <button
                   onClick={handleDownloadClick}
                   className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-white hover:bg-gray-50 transition-colors text-gray-900 font-semibold cursor-pointer"
                 >
@@ -169,12 +169,12 @@ export const LandingPage: React.FC = () => {
                     <span className="text-xs text-gray-500 font-medium">Download APK</span>
                     <span className="text-sm font-bold">Coming Soon</span>
                   </div>
-              </button>
+                </button>
               </div>
             </div>
-            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
       {/* Contact Footer */}
       <footer id="contact" className="bg-white border-t border-gray-100 pt-16 pb-8">
@@ -182,38 +182,38 @@ export const LandingPage: React.FC = () => {
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-2">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#f27e31] to-[#b3521b] flex items-center justify-center text-white">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FF5F00] to-[#CC4C00] flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
                   <img src="/starline-logo.png" alt="Logo" className="w-5 h-5 object-contain brightness-0 invert" />
                 </div>
-                <span className="text-lg font-bold tracking-tight text-gray-900">ConetSmart</span>
-            </div>
+                <span className="text-lg font-bold tracking-tight text-gray-900">IzyConnect</span>
+              </div>
               <p className="text-gray-500 leading-relaxed max-w-xs">
                 Empowering you with fast, reliable internet connectivity. Join thousands of satisfied users today.
               </p>
             </div>
-            
+
             <div>
               <h4 className="font-bold text-gray-900 mb-4">Contact Us</h4>
               <ul className="space-y-3 text-sm text-gray-600">
                 <li>29 Olajunwon Street Tejuosho, Yaba, Lagos.</li>
-                <li><a href="tel:09122538412" className="hover:text-[#f27e31]">09122538412</a></li>
+                <li><a href="tel:09122538412" className="hover:text-[#FF5F00]">09122538412</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-bold text-gray-900 mb-4">Legal</h4>
               <ul className="space-y-3 text-sm text-gray-600">
-                <li><a href="/privacy" className="hover:text-[#f27e31]">Privacy Policy</a></li>
-                <li><a href="/terms" className="hover:text-[#f27e31]">Terms of Service</a></li>
+                <li><a href="/privacy" className="hover:text-[#FF5F00]">Privacy Policy</a></li>
+                <li><a href="/terms" className="hover:text-[#FF5F00]">Terms of Service</a></li>
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-gray-100 pt-8 text-center text-sm text-gray-500">
-            <p>© {new Date().getFullYear()} ConetSmart. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} IzyConnect. All rights reserved.</p>
           </div>
         </div>
-        </footer>
+      </footer>
     </div>
   );
 };

@@ -23,9 +23,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
   const [resetEmail, setResetEmail] = useState('');
   const [resetLoading, setResetLoading] = useState(false);
   const [resetMessage, setResetMessage] = useState('');
-  
+
   const { login, register, adminLogin, resetPassword, profileLoading, authUser } = useAuth();
-  
+
   // Load saved credentials on component mount and optionally auto-login
   React.useEffect(() => {
     const credentials = secureStorage.getCredentials();
@@ -36,7 +36,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
       // Optional auto-login is intentionally disabled
     }
   }, []);
-  
+
   // If user is already authenticated, show a message
   React.useEffect(() => {
     if (authUser) {
@@ -72,7 +72,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
 
     try {
       let success = false;
-      
+
       if (isAdmin) {
         success = await adminLogin(email, password);
         if (!success) {
@@ -109,34 +109,34 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-400/10 to-orange-400/10 rounded-full blur-3xl"></div>
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-orange-300/10 to-orange-300/10 rounded-full blur-3xl"></div>
         </div>
-        
-        <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl p-8 border-2 border-[#f27e31]/30 shadow-2xl shadow-black/20">
+
+        <div className="relative bg-white/90 backdrop-blur-2xl rounded-[2.5rem] p-8 md:p-12 border border-white/50 shadow-2xl shadow-orange-500/10">
           {/* Subtle loading indicator for auth check */}
           {profileLoading && (
-            <div className="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-2xl">
+            <div className="mb-6 p-4 bg-orange-50/80 backdrop-blur-sm border border-orange-100 rounded-2xl">
               <div className="flex items-center gap-3 text-orange-700 text-sm">
-                <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-4 h-4 border-2 border-[#FF5F00] border-t-transparent rounded-full animate-spin"></div>
                 <span className="font-medium">Checking authentication...</span>
               </div>
             </div>
           )}
-          
-          <div className="text-center mb-8">
-            <div className="relative w-20 h-20 mx-auto mb-6">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-500 rounded-2xl shadow-lg"></div>
-              <div className="absolute inset-1 bg-white rounded-xl flex items-center justify-center">
+
+          <div className="text-center mb-10">
+            <div className="relative w-24 h-24 mx-auto mb-8 group">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#FF5F00] to-[#FF9000] rounded-3xl shadow-xl shadow-orange-500/20 group-hover:shadow-orange-500/30 transition-all duration-500 rotate-6 group-hover:rotate-12"></div>
+              <div className="absolute inset-0 bg-white rounded-3xl flex items-center justify-center transform transition-all duration-500 -rotate-3 group-hover:rotate-0">
                 <img
                   src="/starline-logo.png"
-                  alt="ConetSmart"
-                  className="w-12 h-12 object-contain"
+                  alt="IzyConnect"
+                  className="w-14 h-14 object-contain"
                 />
               </div>
             </div>
-            <h1 className={`text-3xl font-bold mb-2 tracking-tight ${isAdmin ? 'text-gray-900' : 'text-gray-900'}`}>
-              {isAdmin ? 'Admin Portal' : 'Welcome to ConetSmart'}
+            <h1 className={`text-4xl font-extrabold mb-3 tracking-tight ${isAdmin ? 'text-gray-900' : 'text-gray-900'}`}>
+              {isAdmin ? 'Admin Portal' : (isLogin ? 'Welcome Back!' : 'Create Account')}
             </h1>
-            <p className="text-gray-600 text-base">
-              {isAdmin ? 'Secure admin access' : (isLogin ? 'Sign in to your account' : 'Create your new account')}
+            <p className="text-gray-500 text-lg">
+              {isAdmin ? 'Secure admin access' : (isLogin ? 'Sign in to manage your internet' : 'Join thousands of connected users')}
             </p>
           </div>
 
@@ -225,18 +225,18 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 px-6 bg-gradient-to-r from-[#f27e31] to-[#d96d2b] hover:from-[#d96d2b] hover:to-[#b3521b] disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold text-base rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-orange-500/25 disabled:cursor-not-allowed disabled:shadow-none transform hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full py-4 px-6 bg-gradient-to-r from-[#FF5F00] to-[#FF8000] hover:from-[#E65100] hover:to-[#FF6D00] disabled:from-gray-300 disabled:to-gray-400 text-white font-bold text-lg rounded-2xl transition-all duration-300 shadow-xl shadow-orange-500/20 hover:shadow-orange-500/30 hover:-translate-y-1 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-y-0 active:scale-[0.98]"
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-3">
-                  <div className="w-5 h-5 border-2 border-white/50 border-t-white rounded-full animate-spin"></div>
-                  <span>Please wait...</span>
+                  <div className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <span>Processing...</span>
                 </div>
               ) : (
                 <span className="flex items-center justify-center gap-2">
-                  {isAdmin ? 'Access Admin Portal' : (isLogin ? 'Sign In to Account' : 'Create New Account')}
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  {isAdmin ? 'Access Portal' : (isLogin ? 'Sign In' : 'Create Account')}
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </span>
               )}
@@ -254,13 +254,21 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
             )}
 
             {!isAdmin && (
-              <div className="text-center">
+              <div className="text-center mt-6">
                 <button
                   type="button"
                   onClick={() => setIsLogin(!isLogin)}
-                  className="inline-flex items-center gap-2 text-[#f27e31] hover:text-[#d96d2b] text-sm font-medium transition-all duration-200 hover:underline px-4 py-2 rounded-lg hover:bg-orange-50"
+                  className="inline-flex items-center gap-2 text-gray-500 hover:text-[#FF5F00] text-sm font-semibold transition-all duration-200 group"
                 >
-                  {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+                  {isLogin ? (
+                    <>
+                      Don't have an account? <span className="text-[#FF5F00] group-hover:underline">Sign up now</span>
+                    </>
+                  ) : (
+                    <>
+                      Already have an account? <span className="text-[#FF5F00] group-hover:underline">Sign in</span>
+                    </>
+                  )}
                 </button>
               </div>
             )}

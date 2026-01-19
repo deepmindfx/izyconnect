@@ -62,7 +62,7 @@ export const VirtualAccountPage: React.FC<VirtualAccountPageProps> = ({ onBack }
 
   const checkExistingAccount = async () => {
     if (!user) return;
-    
+
     setStep('loading');
     let existingAccount: any = null;
     try {
@@ -70,7 +70,7 @@ export const VirtualAccountPage: React.FC<VirtualAccountPageProps> = ({ onBack }
     } catch (e) {
       existingAccount = null;
     }
-    
+
     if (existingAccount) {
       setVirtualAccount({
         id: existingAccount.reference || '',
@@ -240,7 +240,7 @@ export const VirtualAccountPage: React.FC<VirtualAccountPageProps> = ({ onBack }
                   </div>
                 </div>
               </Card>
-              
+
               <Card className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
@@ -257,7 +257,7 @@ export const VirtualAccountPage: React.FC<VirtualAccountPageProps> = ({ onBack }
             {/* Form */}
             <Card className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Details</h3>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <Input
@@ -360,7 +360,7 @@ export const VirtualAccountPage: React.FC<VirtualAccountPageProps> = ({ onBack }
                     <p className="text-sm text-gray-600 font-medium mb-1">Bank Name</p>
                     <p className="text-lg font-bold text-gray-900">{virtualAccount.bankName}</p>
                   </div>
-                  
+
                   <div className="bg-orange-50 p-4 rounded-xl">
                     <p className="text-sm text-gray-600 font-medium mb-2">Account Number</p>
                     <div className="flex items-center justify-between gap-3">
@@ -379,12 +379,12 @@ export const VirtualAccountPage: React.FC<VirtualAccountPageProps> = ({ onBack }
                     </div>
                   </div>
 
-                   <div className="bg-gray-50 p-4 rounded-xl">
+                  <div className="bg-gray-50 p-4 rounded-xl">
                     <p className="text-sm text-gray-600 font-medium mb-1">Account Name</p>
                     <p className="text-lg font-bold text-gray-900">
                       {(virtualAccount?.id && user?.firstName && user?.lastName)
                         ? `${user.firstName} ${user.lastName}`
-                        : `${formData.firstName} ${formData.lastName}`} - ConetSmart
+                        : `${formData.firstName} ${formData.lastName}`} - IzyConnect
                     </p>
                   </div>
 
@@ -436,9 +436,9 @@ export const VirtualAccountPage: React.FC<VirtualAccountPageProps> = ({ onBack }
                 <Wallet size={20} className="mr-2" />
                 Back to Wallet
               </Button>
-              
-              <Button 
-                variant="outline" 
+
+              <Button
+                variant="outline"
                 onClick={copyAccountNumber}
                 className="w-full h-12 text-base font-semibold"
               >

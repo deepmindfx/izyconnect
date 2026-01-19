@@ -64,7 +64,7 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
     try {
       const { data, error } = await supabase.rpc('get_transfer_settings');
       if (error) throw error;
-      
+
       if (data && data.transfer_enabled === 'true') {
         setTransferSettings({
           transfer_enabled: data.transfer_enabled === 'true',
@@ -134,7 +134,7 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
 
   const calculateCharge = (transferAmount: number): number => {
     if (!transferSettings?.transfer_charge_enabled) return 0;
-    
+
     if (transferSettings.transfer_charge_type === 'percentage') {
       return (transferAmount * transferSettings.transfer_charge_value) / 100;
     } else {
@@ -144,7 +144,7 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
 
   const validateAmount = (): boolean => {
     const transferAmount = parseFloat(amount);
-    
+
     if (!transferAmount || transferAmount <= 0) {
       setError('Please enter a valid amount');
       return false;
@@ -198,16 +198,16 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
       if (data.success) {
         // Small delay to ensure database is updated
         await new Promise(resolve => setTimeout(resolve, 500));
-        
+
         // Refresh session to get updated wallet balance
         await refreshSession();
-        
+
         // Call the success callback to refresh data
         onSuccess();
-        
+
         // Close the modal
         onClose();
-        
+
         // Show success message
         alert(`Transfer successful! ₦${transferAmount.toLocaleString()} sent to ${recipientUser?.email}`);
       } else {
@@ -260,9 +260,9 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
               <span className="text-orange-600 text-xs font-bold">i</span>
             </div>
             <div>
-            <p className="text-orange-800 text-sm font-medium">ConetSmart Wallet Transfer</p>
+              <p className="text-orange-800 text-sm font-medium">IzyConnect Wallet Transfer</p>
               <p className="text-orange-700 text-xs mt-1">
-                This feature allows you to transfer funds between ConetSmart wallets only. 
+                This feature allows you to transfer funds between IzyConnect wallets only.
                 You can send money to other users using their email or phone number.
               </p>
             </div>
@@ -318,7 +318,7 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">
-                    {recipientUser.firstName && recipientUser.lastName 
+                    {recipientUser.firstName && recipientUser.lastName
                       ? `${recipientUser.firstName} ${recipientUser.lastName}`
                       : recipientUser.email
                     }

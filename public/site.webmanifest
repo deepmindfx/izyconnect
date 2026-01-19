@@ -1,7 +1,7 @@
 {
-  "name": "ConetSmart - Premium Wireless Internet Service Provider",
-  "short_name": "ConetSmart",
-  "description": "Get high-speed wireless internet with ConetSmart. Advanced technology, reliable connectivity, and excellent customer support. Available for homes and businesses.",
+  "name": "IzyConnect - Premium Wireless Internet Service Provider",
+  "short_name": "IzyConnect",
+  "description": "Get high-speed wireless internet with IzyConnect. Advanced technology, reliable connectivity, and excellent customer support. Available for homes and businesses.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f27e31",
@@ -9,7 +9,11 @@
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "en",
-  "categories": ["business", "productivity", "utilities"],
+  "categories": [
+    "business",
+    "productivity",
+    "utilities"
+  ],
   "icons": [
     {
       "src": "/starnetx-logo.svg",

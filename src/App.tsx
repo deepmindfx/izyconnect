@@ -52,7 +52,7 @@ function AppContent() {
       <div className="min-h-screen bg-[#f27e31] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-          <div className="text-white text-xl">Loading ConetSmart...</div>
+          <div className="text-white text-xl">Loading IzyConnect...</div>
         </div>
       </div>
     );
@@ -81,15 +81,15 @@ function App() {
     // Check if the page was refreshed
     const entries = performance.getEntriesByType("navigation");
     const isRefresh = entries.length > 0 && (entries[0] as PerformanceNavigationTiming).type === "reload";
-    
+
     if (isRefresh) {
       setIsHandlingRefresh(true);
       console.log('Page refreshed - clearing all data and redirecting to login...');
-      
+
       const clearAndRedirect = async () => {
         await clearSessionAndRedirect();
       };
-      
+
       clearAndRedirect();
     } else {
       // Initialize PWA session management only on normal navigation

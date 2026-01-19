@@ -78,7 +78,7 @@ export const UserDashboard: React.FC = () => {
                       </button>
                     </div>
                     <h2 className="text-2xl min-[320px]:text-3xl min-[375px]:text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">
-                      {showBalance 
+                      {showBalance
                         ? `₦${(user?.walletBalance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
                         : '₦****.**'}
                     </h2>
@@ -90,7 +90,7 @@ export const UserDashboard: React.FC = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex-1 min-w-0 mr-3">
                           <div className="flex items-center gap-2 mb-1">
-                            <Smartphone size={14} className="text-orange-600" />
+                            <Smartphone size={14} className="text-[#FF5F00]" />
                             <p className="text-orange-900 text-xs font-semibold">Virtual Account</p>
                           </div>
                           <p className="text-orange-800 font-mono text-sm font-bold tracking-wide mb-1 break-all">
@@ -108,11 +108,11 @@ export const UserDashboard: React.FC = () => {
                             setCopied(true);
                             setTimeout(() => setCopied(false), 2000);
                           }}
-                          className="p-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 flex-shrink-0"
+                          className="p-2.5 bg-[#FF5F00] hover:bg-[#E65000] text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 flex-shrink-0"
                           title="Copy account number"
                           aria-label="Copy account number"
                         >
-                          <Copy size={16} className={copied ? 'text-orange-200' : 'text-white'} />
+                          <Copy size={18} className={copied ? 'text-white' : 'text-white'} />
                         </button>
                       </div>
                     </div>
@@ -128,7 +128,7 @@ export const UserDashboard: React.FC = () => {
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+                          <div className="w-10 h-10 bg-gradient-to-br from-[#FF5F00] to-[#FF8000] rounded-xl flex items-center justify-center shadow-lg">
                             <Smartphone size={18} className="text-white" />
                           </div>
                           <div>
@@ -148,7 +148,7 @@ export const UserDashboard: React.FC = () => {
                   <div className="flex gap-2 sm:gap-3">
                     <button
                       onClick={() => setShowTransferModal(true)}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 sm:py-3 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 text-xs sm:text-sm"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-3 sm:py-3.5 bg-gradient-to-r from-[#FF5F00] to-[#FF8000] hover:from-[#E65100] hover:to-[#FF6D00] text-white rounded-2xl font-bold transition-all duration-200 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] text-xs sm:text-sm"
                     >
                       <Send size={14} />
                       <span>Send</span>
@@ -168,18 +168,19 @@ export const UserDashboard: React.FC = () => {
               </div>
             </div>
 
+
             {/* Quick Actions removed as requested */}
 
             {/* Upgrade Account - Redesigned */}
             <div className="mx-4">
-              <div className="relative overflow-hidden bg-gradient-to-br from-[#f27e31] via-[#d96d2b] to-[#b3521b] rounded-3xl p-6 shadow-xl">
+              <div className="relative overflow-hidden bg-gradient-to-br from-[#FF5F00] via-[#FF8000] to-[#E65100] rounded-3xl p-6 shadow-xl shadow-orange-500/20">
                 {/* Background Pattern */}
                 <div className="absolute inset-0">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
                   <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-white/5 rounded-full blur-xl"></div>
                 </div>
-                
+
                 <div className="relative z-10 flex items-center justify-between max-[380px]:flex-col max-[380px]:items-start max-[380px]:gap-3">
                   <div className="flex items-center space-x-4">
                     <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg border border-white/30">
@@ -192,7 +193,7 @@ export const UserDashboard: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setActivePage('virtual-account')}
                     className="bg-white/20 backdrop-blur-sm hover:bg-white/30 p-3 rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95 border border-white/30 shadow-lg max-[380px]:self-stretch max-[380px]:w-full max-[380px]:justify-center"
                   >
@@ -209,7 +210,7 @@ export const UserDashboard: React.FC = () => {
                 <div className="bg-gradient-to-r from-gray-50 to-orange-50 px-6 py-5 border-b border-gray-100 max-[380px]:px-4 max-[380px]:py-4">
                   <div className="flex items-center justify-between max-[380px]:flex-col max-[380px]:items-start max-[380px]:gap-2">
                     <div className="flex items-center space-x-3 max-[380px]:space-x-2">
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#f27e31] to-[#b3521b] rounded-2xl flex items-center justify-center shadow-md max-[380px]:w-9 max-[380px]:h-9">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#FF5F00] to-[#FF8000] rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/20 max-[380px]:w-9 max-[380px]:h-9">
                         <Clock size={18} className="text-white" />
                       </div>
                       <div>
@@ -217,7 +218,7 @@ export const UserDashboard: React.FC = () => {
                         <p className="text-gray-600 text-sm max-[380px]:text-xs">Your latest activity</p>
                       </div>
                     </div>
-                    <button 
+                    <button
                       onClick={() => setActivePage('settings')}
                       className="text-[#f27e31] text-sm font-semibold hover:text-[#d96d2b] transition-colors flex items-center space-x-1 max-[380px]:text-xs"
                     >
@@ -226,10 +227,10 @@ export const UserDashboard: React.FC = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 {/* Content */}
                 <div className="p-6">
-            <RecentTransactions onNavigateToHistory={() => setActivePage('settings')} />
+                  <RecentTransactions onNavigateToHistory={() => setActivePage('settings')} />
                 </div>
               </div>
             </div>
@@ -238,12 +239,12 @@ export const UserDashboard: React.FC = () => {
             <div className="mx-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">Quick Services</h3>
-                <button 
+                <button
                   onClick={() => setActivePage('plans')}
                   className="text-[#f27e31] text-sm font-medium flex items-center gap-1"
                 >
                   View all
-                  <ArrowUpRight size={16} />
+                  <ArrowUpRight size={16} className="text-[#FF5F00]" />
                 </button>
               </div>
               <div className="grid grid-cols-3 gap-4">
@@ -257,7 +258,7 @@ export const UserDashboard: React.FC = () => {
                     onClick={() => setActivePage('plans')}
                     className={`flex flex-col items-center justify-center p-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100`}
                   >
-                    <div className={`w-12 h-12 ${item.color} rounded-2xl flex items-center justify-center mb-3`}> 
+                    <div className={`w-12 h-12 ${item.color} rounded-2xl flex items-center justify-center mb-3`}>
                       <div className={`w-6 h-6 ${item.dot} rounded-full`}></div>
                     </div>
                     <span className="text-gray-800 text-sm font-semibold">{item.label}</span>
@@ -274,9 +275,9 @@ export const UserDashboard: React.FC = () => {
                   Save up to 20%
                 </div>
               </div>
-            <PlansList onSeeAllClick={() => setActivePage('plans')} />
+              <PlansList onSeeAllClick={() => setActivePage('plans')} />
             </div>
-          </div>
+          </div >
         );
       case 'plans':
         return <PlansList showAll={true} />;
@@ -297,22 +298,22 @@ export const UserDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f27e31]">
-      <div className="max-w-md mx-auto bg-[#f1f1f1] min-h-screen relative">
+    <div className="min-h-screen bg-[#F8F9FA]">
+      <div className="max-w-md mx-auto bg-[#F8F9FA] min-h-screen relative">
         {/* Header */}
-        <div className="bg-gradient-to-br from-[#f27e31] via-[#d96d2b] to-[#b3521b] px-3 sm:px-4 pt-8 sm:pt-10 pb-7 sm:pb-8 relative overflow-hidden">
+        <div className="bg-gradient-to-br from-[#FF5F00] via-[#FF8000] to-[#E65100] px-3 sm:px-4 pt-8 sm:pt-14 pb-7 sm:pb-16 relative overflow-hidden rounded-b-[2.5rem] shadow-2xl shadow-orange-500/20">
           {/* Background Pattern */}
           <div className="absolute inset-0 bg-white/10 rounded-b-3xl"></div>
-          
+
           {/* Decorative Elements */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-2xl"></div>
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-2xl"></div>
-          
+
           <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 sm:h-12 sm:w-12 bg-white rounded-xl flex items-center justify-center shadow-md">
-                  <img src="/starline-logo.png" alt="ConetSmart" className="h-7 w-7 sm:h-8 sm:w-8 object-contain" />
+                  <img src="/starline-logo.png" alt="IzyConnect" className="h-7 w-7 sm:h-8 sm:w-8 object-contain" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-white/90 text-xs">Welcome</span>
@@ -331,7 +332,7 @@ export const UserDashboard: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
 
           {/* Network Status Indicator */}
           {(!isOnline || isSlow) && (
@@ -352,7 +353,7 @@ export const UserDashboard: React.FC = () => {
             </div>
           )}
         </div>
-        
+
         <main className="pb-40 min-h-[calc(100vh-200px)] max-[380px]:pb-36 max-[360px]:pb-32 max-[350px]:pb-28">
           <div className="px-4 -mt-4 relative">
             <div className="min-h-[calc(100vh-300px)] max-[380px]:min-h-[calc(100vh-280px)] max-[360px]:min-h-[calc(100vh-260px)] max-[350px]:min-h-[calc(100vh-240px)]">
@@ -361,7 +362,7 @@ export const UserDashboard: React.FC = () => {
           </div>
         </main>
         <BottomNavigation activePage={activePage} onPageChange={setActivePage} />
-        
+
         {/* Transfer Modal */}
         <TransferModal
           isOpen={showTransferModal}

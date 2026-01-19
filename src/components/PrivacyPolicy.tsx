@@ -16,7 +16,7 @@ export const PrivacyPolicy: React.FC = () => {
 
         <div className="prose prose-orange max-w-none text-gray-600">
           <p className="mb-6">
-            At ConetSmart, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our mobile application, or use our internet services.
+            At IzyConnect, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our mobile application, or use our internet services.
           </p>
 
           <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">1. Information We Collect</h2>
@@ -61,7 +61,7 @@ export const PrivacyPolicy: React.FC = () => {
             If you have questions or comments about this Privacy Policy, please contact us at:
           </p>
           <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <p className="font-semibold text-gray-900">ConetSmart</p>
+            <p className="font-semibold text-gray-900">IzyConnect</p>
             <p>26 church Street, Idumota, Lagos Island, Lagos.</p>
             <p>Phone: 08033707947, 08036506511</p>
           </div>

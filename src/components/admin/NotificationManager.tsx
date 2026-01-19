@@ -3,13 +3,13 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { supabase } from '../../utils/supabase';
-import { 
-  Bell, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Eye, 
-  EyeOff, 
+import {
+  Bell,
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
+  EyeOff,
   Calendar,
   Users,
   Video,
@@ -80,7 +80,7 @@ export const NotificationManager: React.FC = () => {
     try {
       const { error } = await supabase
         .from('admin_notifications')
-        .update({ 
+        .update({
           is_active: !currentStatus,
           updated_at: new Date().toISOString()
         })
@@ -91,8 +91,8 @@ export const NotificationManager: React.FC = () => {
         return;
       }
 
-      setNotifications(prev => prev.map(notification => 
-        notification.id === id 
+      setNotifications(prev => prev.map(notification =>
+        notification.id === id
           ? { ...notification, is_active: !currentStatus }
           : notification
       ));
@@ -191,8 +191,8 @@ export const NotificationManager: React.FC = () => {
           <h2 className="text-xl font-semibold text-gray-900">Notification Manager</h2>
           <p className="text-gray-600">Create and manage user notifications and announcements</p>
         </div>
-        <Button 
-          onClick={() => setShowForm(true)} 
+        <Button
+          onClick={() => setShowForm(true)}
           className="flex items-center gap-2"
         >
           <Plus size={16} />
@@ -213,7 +213,7 @@ export const NotificationManager: React.FC = () => {
             </div>
           </div>
         </Card>
-        
+
         <Card className="p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -227,7 +227,7 @@ export const NotificationManager: React.FC = () => {
             </div>
           </div>
         </Card>
-        
+
         <Card className="p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
@@ -241,7 +241,7 @@ export const NotificationManager: React.FC = () => {
             </div>
           </div>
         </Card>
-        
+
         <Card className="p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -260,7 +260,7 @@ export const NotificationManager: React.FC = () => {
       {/* Notifications List */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">All Notifications</h3>
-        
+
         {notifications.length === 0 ? (
           <div className="text-center py-12">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -297,44 +297,44 @@ export const NotificationManager: React.FC = () => {
                         </span>
                       )}
                     </div>
-                    
+
                     <p className="text-gray-600 mb-2">{notification.message}</p>
-                    
+
                     {notification.description && (
                       <p className="text-sm text-gray-500 mb-2">{notification.description}</p>
                     )}
-                    
+
                     <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                       <div className="flex items-center gap-1">
                         <Users size={14} />
                         <span>{getTargetAudienceDisplay(notification.target_audience)}</span>
                       </div>
-                      
+
                       {notification.view_count !== undefined && (
                         <div className="flex items-center gap-1">
                           <Eye size={14} />
                           <span>{notification.view_count} views</span>
                         </div>
                       )}
-                      
+
                       {(notification.video_url || notification.youtube_url) && (
                         <div className="flex items-center gap-1">
                           <Video size={14} />
                           <span>Has video</span>
                         </div>
                       )}
-                      
+
                       {notification.expires_at && (
                         <div className="flex items-center gap-1">
                           <Calendar size={14} />
                           <span>Expires {new Date(notification.expires_at).toLocaleDateString()}</span>
                         </div>
                       )}
-                      
+
                       <span>Created {new Date(notification.created_at).toLocaleDateString()}</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
                     <Button
                       variant="outline"
@@ -345,7 +345,7 @@ export const NotificationManager: React.FC = () => {
                       {notification.is_active ? <EyeOff size={16} /> : <Eye size={16} />}
                       {notification.is_active ? 'Deactivate' : 'Activate'}
                     </Button>
-                    
+
                     <Button
                       variant="outline"
                       size="sm"
@@ -358,7 +358,7 @@ export const NotificationManager: React.FC = () => {
                       <Edit size={16} />
                       Edit
                     </Button>
-                    
+
                     <Button
                       variant="danger"
                       size="sm"
@@ -472,7 +472,7 @@ const NotificationForm: React.FC<NotificationFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const submitData = {
       ...formData,
       expires_at: formData.expires_at ? new Date(formData.expires_at + 'T23:59:59').toISOString() : null,
@@ -497,7 +497,7 @@ const NotificationForm: React.FC<NotificationFormProps> = ({
               label="Title"
               value={formData.title}
               onChange={(value) => setFormData({ ...formData, title: value })}
-              placeholder="e.g., Welcome to ConetSmart!"
+              placeholder="e.g., Welcome to IzyConnect!"
               required
             />
 
@@ -609,14 +609,12 @@ const NotificationForm: React.FC<NotificationFormProps> = ({
                   />
                   <label
                     htmlFor="show_as_popup"
-                    className={`block w-12 h-6 rounded-full cursor-pointer transition-colors ${
-                      formData.show_as_popup ? 'bg-orange-500' : 'bg-gray-300'
-                    }`}
+                    className={`block w-12 h-6 rounded-full cursor-pointer transition-colors ${formData.show_as_popup ? 'bg-orange-500' : 'bg-gray-300'
+                      }`}
                   >
                     <span
-                      className={`block w-5 h-5 bg-white rounded-full shadow transform transition-transform ${
-                        formData.show_as_popup ? 'translate-x-6' : 'translate-x-0.5'
-                      } mt-0.5`}
+                      className={`block w-5 h-5 bg-white rounded-full shadow transform transition-transform ${formData.show_as_popup ? 'translate-x-6' : 'translate-x-0.5'
+                        } mt-0.5`}
                     />
                   </label>
                 </div>
@@ -639,14 +637,12 @@ const NotificationForm: React.FC<NotificationFormProps> = ({
                   />
                   <label
                     htmlFor="is_active"
-                    className={`block w-12 h-6 rounded-full cursor-pointer transition-colors ${
-                      formData.is_active ? 'bg-orange-500' : 'bg-gray-300'
-                    }`}
+                    className={`block w-12 h-6 rounded-full cursor-pointer transition-colors ${formData.is_active ? 'bg-orange-500' : 'bg-gray-300'
+                      }`}
                   >
                     <span
-                      className={`block w-5 h-5 bg-white rounded-full shadow transform transition-transform ${
-                        formData.is_active ? 'translate-x-6' : 'translate-x-0.5'
-                      } mt-0.5`}
+                      className={`block w-5 h-5 bg-white rounded-full shadow transform transition-transform ${formData.is_active ? 'translate-x-6' : 'translate-x-0.5'
+                        } mt-0.5`}
                     />
                   </label>
                 </div>

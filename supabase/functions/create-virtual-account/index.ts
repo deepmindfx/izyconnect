@@ -65,7 +65,7 @@ serve(async (req) => {
     // Verify the user is authenticated
     const token = authorization.replace('Bearer ', '')
     const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token)
-    
+
     if (authError || !user) {
       return new Response(
         JSON.stringify({ status: 'error', message: 'Unauthorized' }),
@@ -147,7 +147,7 @@ serve(async (req) => {
       firstname: effectiveFirstName,
       lastname: effectiveLastName,
       phonenumber: effectivePhone || undefined,
-      narration: `${effectiveFirstName} ${effectiveLastName} - ConetSmart`,
+      narration: `${effectiveFirstName} ${effectiveLastName} - IzyConnect`,
       // Flutterwave virtual accounts are NGN only
       currency: 'NGN',
       ...(wantsPermanent ? {} : { amount: Number(requestData.amount) })
@@ -171,9 +171,9 @@ serve(async (req) => {
 
     // Use Flutterwave v3 endpoint
     const flutterwaveUrl = `${getFlutterwaveApiUrl(flutterwaveConfig.environment)}/virtual-account-numbers`
-    
+
     console.log('Using Flutterwave URL:', flutterwaveUrl)
-    
+
     const flutterwaveResponse = await fetch(flutterwaveUrl, {
       method: 'POST',
       headers: {

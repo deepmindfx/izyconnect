@@ -69,7 +69,7 @@ export const AdminDashboard: React.FC = () => {
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">ConetSmart Admin</h1>
+            <h1 className="text-2xl font-bold text-gray-900">IzyConnect Admin</h1>
             <Button variant="outline" onClick={handleLogout}>
               Sign Out
             </Button>
@@ -101,11 +101,10 @@ export const AdminDashboard: React.FC = () => {
                     <button
                       key={item.id}
                       onClick={() => setActivePage(item.id as AdminPage)}
-                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
-                        activePage === item.id
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${activePage === item.id
                           ? 'bg-green-100 text-green-700'
                           : 'text-gray-700 hover:bg-gray-100'
-                      }`}
+                        }`}
                     >
                       <Icon size={20} />
                       {item.label}
@@ -150,20 +149,20 @@ const AdminOverview: React.FC = () => {
   }, []);
 
   const allPurchases = getAllPurchases();
-  
+
   // Calculate real statistics
   const totalRevenue = allPurchases.reduce((sum, purchase) => sum + purchase.amount, 0);
   const totalUsers = allUsers.length;
   const activeConnections = credentials.filter(cred => cred.status === 'used').length;
   const totalLocations = locations.length;
-  
+
   const stats = {
     totalRevenue,
     totalUsers,
     activeConnections,
     totalLocations,
   };
-  
+
   // Get recent activity (last 10 purchases)
   const recentActivity = [...allPurchases]
     .sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime())
@@ -174,7 +173,7 @@ const AdminOverview: React.FC = () => {
       const minutesAgo = Math.floor(timeDiff / (1000 * 60));
       const hoursAgo = Math.floor(minutesAgo / 60);
       const daysAgo = Math.floor(hoursAgo / 24);
-      
+
       let timeDisplay;
       if (daysAgo > 0) {
         timeDisplay = `${daysAgo} day${daysAgo > 1 ? 's' : ''} ago`;
@@ -183,13 +182,13 @@ const AdminOverview: React.FC = () => {
       } else {
         timeDisplay = `${minutesAgo} minute${minutesAgo > 1 ? 's' : ''} ago`;
       }
-      
+
       return {
         action: `Plan purchased by ${user?.email?.split('@')[0] || 'User'}`,
         time: timeDisplay,
       };
     });
-  
+
   // Add recent user registrations
   const recentUsers = [...allUsers]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -199,7 +198,7 @@ const AdminOverview: React.FC = () => {
       const minutesAgo = Math.floor(timeDiff / (1000 * 60));
       const hoursAgo = Math.floor(minutesAgo / 60);
       const daysAgo = Math.floor(hoursAgo / 24);
-      
+
       let timeDisplay;
       if (daysAgo > 0) {
         timeDisplay = `${daysAgo} day${daysAgo > 1 ? 's' : ''} ago`;
@@ -208,13 +207,13 @@ const AdminOverview: React.FC = () => {
       } else {
         timeDisplay = `${minutesAgo} minute${minutesAgo > 1 ? 's' : ''} ago`;
       }
-      
+
       return {
         action: `New user registration - ${user.email.split('@')[0]}`,
         time: timeDisplay,
       };
     });
-  
+
   const combinedActivity = [...recentActivity, ...recentUsers]
     .sort((a, b) => {
       // Simple time sorting - in production you'd want more robust sorting
@@ -229,7 +228,7 @@ const AdminOverview: React.FC = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold text-gray-900">Dashboard Overview</h2>
         <div className="flex gap-2">
-          <Button 
+          <Button
             onClick={() => {
               console.log('Running debug...');
               debugAdminDataLoading();
@@ -239,7 +238,7 @@ const AdminOverview: React.FC = () => {
           >
             Debug Data Loading
           </Button>
-          <Button 
+          <Button
             onClick={() => {
               console.log('Testing RLS...');
               testRLS();
@@ -251,7 +250,7 @@ const AdminOverview: React.FC = () => {
           </Button>
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="p-6">
           <div className="flex items-center gap-4">
@@ -331,7 +330,7 @@ const AdminOverview: React.FC = () => {
                 allPurchases.forEach(purchase => {
                   planCounts[purchase.planId] = (planCounts[purchase.planId] || 0) + 1;
                 });
-                
+
                 const totalPurchases = allPurchases.length;
                 const planStats = Object.entries(planCounts)
                   .map(([planId, count]) => {
@@ -350,7 +349,7 @@ const AdminOverview: React.FC = () => {
                   })
                   .sort((a, b) => b.purchases - a.purchases)
                   .slice(0, 4);
-                
+
                 return planStats.map((item, index) => (
                   <div key={index} className="space-y-2">
                     <div className="flex justify-between">

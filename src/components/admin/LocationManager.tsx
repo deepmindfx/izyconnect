@@ -74,9 +74,8 @@ const LocationCard: React.FC<LocationCardProps> = ({
     <Card className="p-6">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-            location.isActive ? 'bg-orange-100' : 'bg-gray-100'
-          }`}>
+          <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${location.isActive ? 'bg-orange-100' : 'bg-gray-100'
+            }`}>
             <MapPin className={location.isActive ? 'text-orange-600' : 'text-gray-400'} size={24} />
           </div>
           <div>
@@ -89,11 +88,10 @@ const LocationCard: React.FC<LocationCardProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <span className={`px-2 py-1 rounded-full text-xs ${
-            location.isActive 
-              ? 'bg-orange-100 text-orange-700' 
+          <span className={`px-2 py-1 rounded-full text-xs ${location.isActive
+              ? 'bg-orange-100 text-orange-700'
               : 'bg-gray-100 text-gray-700'
-          }`}>
+            }`}>
             {location.isActive ? 'Active' : 'Inactive'}
           </span>
           <Button
@@ -168,7 +166,7 @@ const LocationForm: React.FC<LocationFormProps> = ({ location, onSubmit, onCance
             label="Location Name"
             value={formData.name}
             onChange={(value) => setFormData({ ...formData, name: value })}
-            placeholder="e.g., ConetSmart 3"
+            placeholder="e.g., IzyConnect 3"
             required
           />
 
@@ -176,7 +174,7 @@ const LocationForm: React.FC<LocationFormProps> = ({ location, onSubmit, onCance
             label="WiFi Network Name"
             value={formData.wifiName}
             onChange={(value) => setFormData({ ...formData, wifiName: value })}
-            placeholder="e.g., ConetSmart 3"
+            placeholder="e.g., IzyConnect 3"
             required
           />
 

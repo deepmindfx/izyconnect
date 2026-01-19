@@ -16,12 +16,12 @@ export const TermsOfService: React.FC = () => {
 
         <div className="prose prose-orange max-w-none text-gray-600">
           <p className="mb-6">
-            Welcome to ConetSmart. By accessing or using our website, mobile application, or internet services, you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree to these terms, please do not use our services.
+            Welcome to IzyConnect. By accessing or using our website, mobile application, or internet services, you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree to these terms, please do not use our services.
           </p>
 
           <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">1. Our Services</h2>
           <p className="mb-4">
-            ConetSmart provides high-speed wireless internet access through various subscription plans (hourly, daily, weekly, monthly). We also offer a digital wallet system and virtual bank accounts to facilitate easy payments and top-ups.
+            IzyConnect provides high-speed wireless internet access through various subscription plans (hourly, daily, weekly, monthly). We also offer a digital wallet system and virtual bank accounts to facilitate easy payments and top-ups.
           </p>
 
           <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">2. User Accounts</h2>
@@ -33,10 +33,10 @@ export const TermsOfService: React.FC = () => {
 
           <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">3. Payments and Wallet</h2>
           <ul className="list-disc pl-5 mb-6 space-y-2">
-            <li><strong>Wallet Funding:</strong> You can fund your ConetSmart wallet via bank transfer to your dedicated virtual account or other supported payment methods.</li>
+            <li><strong>Wallet Funding:</strong> You can fund your IzyConnect wallet via bank transfer to your dedicated virtual account or other supported payment methods.</li>
             <li><strong>Virtual Accounts:</strong> To create a virtual account, you must provide a valid Bank Verification Number (BVN) as required by Central Bank of Nigeria (CBN) regulations.</li>
             <li><strong>No Refunds:</strong> All purchases of internet plans are final and non-refundable once the service has been activated or credentials generated.</li>
-            <li><strong>Transfers:</strong> You are responsible for verifying the recipient information before transferring funds to another user. ConetSmart is not liable for funds sent to the wrong user due to your error.</li>
+            <li><strong>Transfers:</strong> You are responsible for verifying the recipient information before transferring funds to another user. IzyConnect is not liable for funds sent to the wrong user due to your error.</li>
           </ul>
 
           <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">4. Acceptable Use Policy</h2>
@@ -69,7 +69,7 @@ export const TermsOfService: React.FC = () => {
             If you have any questions about these Terms, please contact us at:
           </p>
           <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <p className="font-semibold text-gray-900">ConetSmart</p>
+            <p className="font-semibold text-gray-900">IzyConnect</p>
             <p>26 church Street, Idumota, Lagos Island, Lagos.</p>
             <p>Phone: 08033707947, 08036506511</p>
           </div>

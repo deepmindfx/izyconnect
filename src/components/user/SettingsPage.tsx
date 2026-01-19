@@ -29,7 +29,7 @@ export const SettingsPage: React.FC = () => {
   const itemsPerPage = 5;
 
   const userPurchases = getUserPurchases(user?.id || '');
-  
+
   // Calculate pagination
   const totalPages = Math.ceil(userPurchases.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -70,7 +70,7 @@ export const SettingsPage: React.FC = () => {
       {/* Hero Section */}
       <div className="text-center space-y-3">
         <div className="w-24 h-24 mx-auto mb-2 max-[400px]:w-20 max-[400px]:h-20">
-          <img src="/starline-logo.png" alt="ConetSmart" className="w-full h-full object-contain" />
+          <img src="/starline-logo.png" alt="IzyConnect" className="w-full h-full object-contain" />
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">Settings</h1>
         <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto">Manage your account and preferences</p>
@@ -82,7 +82,7 @@ export const SettingsPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-2 max-[400px]:text-xl">Quick Actions</h2>
           <p className="text-gray-600 max-[400px]:text-sm">Access your most important features</p>
         </div>
-        
+
         <div className="space-y-4">
           <Button
             variant="outline"
@@ -109,7 +109,7 @@ export const SettingsPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-2 max-[400px]:text-xl">Profile Information</h2>
           <p className="text-gray-600 max-[400px]:text-sm">Your account details and statistics</p>
         </div>
-        
+
         <div className="flex items-center gap-6 mb-8 max-[400px]:flex-col max-[400px]:gap-4 max-[400px]:mb-6">
           <div className="w-20 h-20 bg-gradient-to-br from-[#f27e31] to-[#b3521b] rounded-3xl flex items-center justify-center shadow-xl border-2 border-white/30 max-[400px]:w-16 max-[400px]:h-16">
             <span className="text-white text-2xl font-black max-[400px]:text-xl">
@@ -160,7 +160,7 @@ export const SettingsPage: React.FC = () => {
             View All Transactions
           </Button>
         </div>
-        
+
         {userPurchases.length === 0 ? (
           <div className="text-center py-12">
             <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center mx-auto mb-6">
@@ -173,8 +173,8 @@ export const SettingsPage: React.FC = () => {
           <>
             <div className="space-y-4 mb-8">
               {currentPurchases.map((purchase) => (
-                <div 
-                  key={purchase.id} 
+                <div
+                  key={purchase.id}
                   className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group max-[400px]:p-4"
                   onClick={() => setSelectedPurchase(purchase)}
                 >
@@ -192,13 +192,12 @@ export const SettingsPage: React.FC = () => {
                     </div>
                     <div className="text-right max-[400px]:text-left max-[400px]:w-full">
                       <p className="font-bold text-2xl text-gray-900 mb-2 max-[400px]:text-xl">₦{purchase.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                      <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                        purchase.status === 'active' 
-                          ? 'bg-gradient-to-r from-orange-100 to-orange-100 text-orange-700 border border-orange-200' 
+                      <span className={`px-4 py-2 rounded-full text-sm font-semibold ${purchase.status === 'active'
+                          ? 'bg-gradient-to-r from-orange-100 to-orange-100 text-orange-700 border border-orange-200'
                           : purchase.status === 'expired'
-                          ? 'bg-gradient-to-r from-red-100 to-pink-100 text-red-700 border border-red-200'
-                          : 'bg-gradient-to-r from-gray-100 to-slate-100 text-gray-700 border border-gray-200'
-                      }`}>
+                            ? 'bg-gradient-to-r from-red-100 to-pink-100 text-red-700 border border-red-200'
+                            : 'bg-gradient-to-r from-gray-100 to-slate-100 text-gray-700 border border-gray-200'
+                        }`}>
                         {purchase.status}
                       </span>
                     </div>
@@ -206,7 +205,7 @@ export const SettingsPage: React.FC = () => {
                 </div>
               ))}
             </div>
-            
+
             {/* Pagination Controls */}
             {totalPages > 1 && (
               <div className="flex items-center justify-between bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-white/50 max-[400px]:flex-col max-[400px]:gap-3">
@@ -220,13 +219,13 @@ export const SettingsPage: React.FC = () => {
                   <ChevronLeft size={16} />
                   Previous
                 </Button>
-                
+
                 <div className="flex items-center gap-2 max-[400px]:order-first">
                   <span className="text-sm text-gray-600 font-medium">
                     Page {currentPage} of {totalPages}
                   </span>
                 </div>
-                
+
                 <Button
                   variant="outline"
                   size="sm"
@@ -249,7 +248,7 @@ export const SettingsPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-2 max-[400px]:text-xl">Account Options</h2>
           <p className="text-gray-600 max-[400px]:text-sm">Manage your account settings and preferences</p>
         </div>
-        
+
         <div className="space-y-4">
           <button className="w-full flex items-center gap-4 p-6 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 group max-[400px]:p-4">
             <div className="w-12 h-12 bg-gradient-to-br from-[#f27e31] to-[#b3521b] rounded-2xl flex items-center justify-center max-[400px]:w-10 max-[400px]:h-10">
@@ -258,7 +257,7 @@ export const SettingsPage: React.FC = () => {
             <span className="text-gray-900 font-semibold text-lg max-[400px]:text-base">Account Information</span>
             <ChevronRight className="text-gray-400 group-hover:text-[#f27e31] transition-colors duration-200 ml-auto" size={20} />
           </button>
-          
+
           <button className="w-full flex items-center gap-4 p-6 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 group max-[400px]:p-4">
             <div className="w-12 h-12 bg-gradient-to-br from-[#f27e31] to-[#b3521b] rounded-2xl flex items-center justify-center max-[400px]:w-10 max-[400px]:h-10">
               <Shield className="text-white" size={24} />
@@ -266,7 +265,7 @@ export const SettingsPage: React.FC = () => {
             <span className="text-gray-900 font-semibold text-lg max-[400px]:text-base">Privacy & Security</span>
             <ChevronRight className="text-gray-400 group-hover:text-[#f27e31] transition-colors duration-200 ml-auto" size={20} />
           </button>
-          
+
           <button className="w-full flex items-center gap-4 p-6 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 group max-[400px]:p-4">
             <div className="w-12 h-12 bg-gradient-to-br from-[#f27e31] to-[#d96d2b] rounded-2xl flex items-center justify-center max-[400px]:w-10 max-[400px]:h-10">
               <Bell className="text-white" size={24} />
@@ -274,7 +273,7 @@ export const SettingsPage: React.FC = () => {
             <span className="text-gray-900 font-semibold text-lg max-[400px]:text-base">Notifications</span>
             <ChevronRight className="text-gray-400 group-hover:text-[#d96d2b] transition-colors duration-200 ml-auto" size={20} />
           </button>
-          
+
           <button className="w-full flex items-center gap-4 p-6 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 group max-[400px]:p-4">
             <div className="w-12 h-12 bg-gradient-to-br from-[#FBBC05] to-[#F29900] rounded-2xl flex items-center justify-center max-[400px]:w-10 max-[400px]:h-10">
               <HelpCircle className="text-white" size={24} />
@@ -296,7 +295,7 @@ export const SettingsPage: React.FC = () => {
           Sign Out
         </Button>
       </div>
-      
+
       {/* Purchase Receipt Modal */}
       {selectedPurchase && (
         <PurchaseReceiptModal
