@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Play, HelpCircle, MoreHorizontal, Grid } from 'lucide-react';
+import { Home, Zap, Gift, User, Grid } from 'lucide-react';
 
 type ActivePage = 'home' | 'plan' | 'rewards' | 'settings' | 'menu';
 
@@ -49,8 +49,8 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
               onClick={() => onPageChange('plan')}
               className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'plan' ? (darkMode ? 'text-[#FFCC00]' : 'text-[#FF5F00]') : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
             >
-              <Play size={22} fill={activePage === 'plan' ? "currentColor" : "none"} />
-              <span className="text-[10px] font-medium">Play</span>
+              <Zap size={22} fill={activePage === 'plan' ? "currentColor" : "none"} />
+              <span className="text-[10px] font-medium">Plans</span>
             </button>
           </div>
 
@@ -63,15 +63,15 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
               onClick={() => onPageChange('rewards')}
               className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'rewards' ? (darkMode ? 'text-[#FFCC00]' : 'text-[#FF5F00]') : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
             >
-              <HelpCircle size={22} />
-              <span className="text-[10px] font-medium">Help</span>
+              <Gift size={22} />
+              <span className="text-[10px] font-medium">Referrals</span>
             </button>
             <button
               onClick={() => onPageChange('settings')}
               className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'settings' ? (darkMode ? 'text-[#FFCC00]' : 'text-[#FF5F00]') : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
             >
-              <MoreHorizontal size={22} />
-              <span className="text-[10px] font-medium">More</span>
+              <User size={22} fill={activePage === 'settings' ? "currentColor" : "none"} />
+              <span className="text-[10px] font-medium">Settings</span>
             </button>
           </div>
         </div>

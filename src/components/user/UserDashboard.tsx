@@ -10,14 +10,14 @@ import { ReferralPage } from './ReferralPage';
 import { SettingsPage } from './SettingsPage';
 import { NotificationBanner } from './NotificationBanner';
 import { TransferModal } from './TransferModal';
-import { Bell, ChevronDown, Smartphone, CreditCard, ArrowUpRight, Clock, Send, TrendingUp, Moon, Sun, Zap, Globe, Share2, MoreHorizontal, HelpCircle, User, Eye, EyeOff } from 'lucide-react';
+import { Bell, CreditCard, ArrowUpRight, Send, TrendingUp, Moon, Sun, Eye, EyeOff } from 'lucide-react';
 
 type ActivePage = 'home' | 'plan' | 'rewards' | 'settings' | 'menu' | 'virtual-account';
 
 export const UserDashboard: React.FC = () => {
   const [activePage, setActivePage] = useState<ActivePage>('home');
   const [darkMode, setDarkMode] = useState(false);
-  const { user, logout, refreshSession } = useAuth();
+  const { user, refreshSession } = useAuth();
   const { refreshData } = useData();
 
   // const { isOnline, isSlow } = useNetworkStatus(); // Can use later for banner
@@ -37,13 +37,11 @@ export const UserDashboard: React.FC = () => {
                 {/* Header Strip */}
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100/10">
                   <div className="flex items-center gap-2">
-                    <span className={`text-sm font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{user?.virtualAccountNumber || '09063412927'}</span>
+                    <span className={`text-sm font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{user?.virtualAccountNumber || 'N/A'}</span>
                     <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>|</span>
                     <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>IzyConnect</span>
                   </div>
-                  <div className="flex items-center gap-1 text-[#FFCC00] text-sm font-medium cursor-pointer" onClick={() => setActivePage('plan')}>
-                    Pulse <ChevronDown size={14} className="-rotate-90" />
-                  </div>
+                  {/* Removed 'Pulse' dropdown logic as it was part of the template */}
                 </div>
 
                 {/* Split Balance Area */}
@@ -90,59 +88,10 @@ export const UserDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-gray-100/10 text-center">
-                  <span className={`text-xs font-medium ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-800'} cursor-pointer transition-colors`}>View details</span>
-                </div>
+                {/* Removed View Details link */}
 
                 {/* Background Texture */}
                 <div className={`absolute inset-0 -z-10 opacity-5 pointer-events-none ${darkMode ? 'bg-white' : 'bg-black'}`} style={{ backgroundImage: 'radial-gradient(circle at center, gray 1px, transparent 1px)', backgroundSize: '10px 10px' }}></div>
-              </div>
-            </div>
-
-            {/* Quick Actions Grid */}
-            <div className="mx-4">
-              <div className="flex items-center justify-center gap-1.5 mb-4">
-                <div className={`w-1.5 h-1.5 rounded-full bg-[#FFCC00]`}></div>
-                <div className={`w-1.5 h-1.5 rounded-full ${darkMode ? 'bg-zinc-800' : 'bg-gray-300'}`}></div>
-                <div className={`w-1.5 h-1.5 rounded-full ${darkMode ? 'bg-zinc-800' : 'bg-gray-300'}`}></div>
-                <div className={`w-1.5 h-1.5 rounded-full ${darkMode ? 'bg-zinc-800' : 'bg-gray-300'}`}></div>
-              </div>
-
-              <div className="grid grid-cols-4 gap-4">
-                {[
-                  { label: 'Airtime', icon: Smartphone, color: 'text-[#FFCC00]' },
-                  { label: 'Data', icon: Globe, color: 'text-[#FFCC00]' },
-                  { label: 'Betting', icon: Zap, color: 'text-[#FFCC00]' },
-                  { label: 'Cable', icon: Share2, color: 'text-[#FFCC00]' },
-                ].map((item, idx) => (
-                  <button key={idx} onClick={() => setActivePage('plan')} className="flex flex-col items-center gap-2 group">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-sm group-active:scale-95 ${darkMode ? 'bg-zinc-900 border border-zinc-800 shadow-none' : 'bg-black shadow-lg shadow-black/20'}`}>
-                      <item.icon size={20} className={item.color} />
-                    </div>
-                    <span className={`text-[10px] font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{item.label}</span>
-                  </button>
-                ))}
-                {[
-                  { label: 'History', icon: Clock, color: 'text-white' },
-                  { label: 'Referral', icon: User, color: 'text-white' },
-                  { label: 'Support', icon: HelpCircle, color: 'text-white' },
-                  { label: 'More', icon: MoreHorizontal, color: 'text-white' },
-                ].map((item, idx) => (
-                  <button
-                    key={idx + 4}
-                    onClick={() => {
-                      if (item.label === 'History') setActivePage('settings');
-                      else if (item.label === 'Referral') setActivePage('rewards');
-                      else setActivePage('settings');
-                    }}
-                    className="flex flex-col items-center gap-2 group"
-                  >
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-sm group-active:scale-95 ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-gray-100'}`}>
-                      <item.icon size={20} className={darkMode ? 'text-gray-300' : 'text-gray-700'} />
-                    </div>
-                    <span className={`text-[10px] font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{item.label}</span>
-                  </button>
-                ))}
               </div>
             </div>
 
@@ -157,14 +106,7 @@ export const UserDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Marketplace Header */}
-            <div className="flex items-center justify-between px-4 mt-2">
-              <div className={`h-[1px] flex-1 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
-              <span className={`px-4 text-xs font-medium ${darkMode ? 'text-gray-500' : 'text-gray-400'} uppercase tracking-wider`}>Marketplace</span>
-              <div className={`h-[1px] flex-1 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
-            </div>
-
-            {/* Popular Plans - keeping logic but restyling container if needed */}
+            {/* Plans List */}
             <div className="mx-4 pb-20">
               <PlansList onSeeAllClick={() => setActivePage('plan')} />
             </div>
