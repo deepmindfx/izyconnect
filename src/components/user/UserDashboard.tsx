@@ -10,7 +10,7 @@ import { ReferralPage } from './ReferralPage';
 import { SettingsPage } from './SettingsPage';
 import { NotificationBanner } from './NotificationBanner';
 import { TransferModal } from './TransferModal';
-import { Bell, CreditCard, ArrowUpRight, Send, TrendingUp, Moon, Sun, Eye, EyeOff } from 'lucide-react';
+import { CreditCard, ArrowUpRight, Send, TrendingUp, Moon, Sun, Eye, EyeOff } from 'lucide-react';
 
 type ActivePage = 'home' | 'plan' | 'rewards' | 'settings' | 'menu' | 'virtual-account';
 
@@ -150,12 +150,8 @@ export const UserDashboard: React.FC = () => {
                     Y'ello, {user?.email?.split('@')[0] || 'User'}
                   </span>
                 </div>
-                <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} font-medium`}>
-                  {user?.virtualAccountNumber || '09063412927'}
-                </div>
-                <div className={`mt-0.5 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium w-fit ${darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-700'}`}>
-                  <span className="mr-1">👑</span> Prestige Silver
-                </div>
+                {/* Phone number removed */}
+                {/* Prestige badge removed */}
               </div>
             </div>
 
@@ -166,32 +162,12 @@ export const UserDashboard: React.FC = () => {
               >
                 {darkMode ? <Sun size={20} /> : <Moon size={20} />}
               </button>
-              <div className="relative">
-                <Bell size={22} className={darkMode ? 'text-white' : 'text-gray-600'} />
-                <span className="absolute -top-1 -right-0.5 bg-[#FFCC00] text-black text-[10px] font-bold px-1 rounded-full min-w-[16px] text-center">
-                  4
-                </span>
-              </div>
+              {/* Notification icon removed */}
             </div>
           </div>
         </div>
 
-        {/* Promo Banner */}
-        <div className="px-4 mt-4">
-          <div className="bg-[#FFF9C4] rounded-2xl p-4 flex items-center justify-between relative overflow-hidden">
-
-            <div className="relative z-10 flex-1">
-              <p className="text-sm font-medium text-gray-900 leading-relaxed">
-                Get <span className="font-bold">3.2GB</span> for <span className="font-bold">₦1,000</span>. Valid for 2 days.
-              </p>
-            </div>
-            <button className="bg-[#FFCC00] text-black font-bold text-xs px-4 py-2 rounded-full shadow-sm whitespace-nowrap ml-2">
-              Claim
-            </button>
-            {/* Hot Deal Icon */}
-            <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-12 h-12 bg-red-500 rounded-full flex items-center justify-center opacity-10 scale-150"></div>
-          </div>
-        </div>
+        {/* Promo Banner Removed */}
 
         <main className="pb-40 min-h-[calc(100vh-200px)] max-[380px]:pb-36 max-[360px]:pb-32 max-[350px]:pb-28">
           <div className="px-4 -mt-4 relative">

@@ -16,7 +16,7 @@ interface PlansListProps {
 export const PlansList: React.FC<PlansListProps> = ({ showAll = false, onSeeAllClick }) => {
   const { plans, isPurchaseInProgress, loading } = useData();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
-  
+
   const displayPlans = showAll ? plans : plans.slice(0, 2);
 
   // Show loading state only during initial load when there are no plans yet
@@ -38,6 +38,20 @@ export const PlansList: React.FC<PlansListProps> = ({ showAll = false, onSeeAllC
             </div>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  // Show empty state if no plans are found
+  if (!loading && plans.length === 0) {
+    return (
+      <div className="text-center py-10 px-4 bg-gray-50 rounded-2xl border border-gray-100">
+        <Wifi className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+        <h3 className="text-gray-900 font-semibold mb-1">No Plans Available</h3>
+        <p className="text-gray-500 text-sm">Check back later for new data bundles.</p>
+        <Button variant="outline" size="sm" className="mt-4" onClick={() => window.location.reload()}>
+          Refresh
+        </Button>
       </div>
     );
   }
@@ -74,18 +88,16 @@ export const PlansList: React.FC<PlansListProps> = ({ showAll = false, onSeeAllC
           return (
             <div
               key={plan.id}
-              className={`group rounded-3xl relative p-[1px] transition-all duration-200 ${
-                plan.popular
+              className={`group rounded-3xl relative p-[1px] transition-all duration-200 ${plan.popular
                   ? 'bg-gradient-to-r from-[#f27e31] to-[#b3521b] hover:from-[#d96d2b] hover:to-[#7c2d12]'
                   : 'bg-gradient-to-r from-[#E3F2FD] to-[#BBDEFB] hover:from-[#CFE8FF] hover:to-[#B7D6FF]'
-              } ${
-                isPurchaseInProgress ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:-translate-y-0.5'
-              }`}
+                } ${isPurchaseInProgress ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:-translate-y-0.5'
+                }`}
               onClick={() => !isPurchaseInProgress && setSelectedPlan(plan)}
             >
               <div className={`relative rounded-3xl overflow-hidden bg-white/20 backdrop-blur-xl border border-white/30`}>
                 {/* Creative header: dark glass with mini sparkline */}
-                <div className={`p-5 pb-4 rounded-t-3xl ${plan.popular ? 'bg-gradient-to-b from-black/80 to-black/60' : 'bg-gradient-to-b from-slate-900/80 to-slate-800/60'} backdrop-blur-md`}> 
+                <div className={`p-5 pb-4 rounded-t-3xl ${plan.popular ? 'bg-gradient-to-b from-black/80 to-black/60' : 'bg-gradient-to-b from-slate-900/80 to-slate-800/60'} backdrop-blur-md`}>
                   <div className="flex items-start justify-between">
                     <div>
                       <h3 className={`tracking-tight ${plan.popular ? 'text-2xl font-black text-white' : 'text-xl font-extrabold text-white'}`}>{plan.name}</h3>
@@ -110,7 +122,7 @@ export const PlansList: React.FC<PlansListProps> = ({ showAll = false, onSeeAllC
                     <div className={`leading-none text-white font-black text-xl drop-shadow`}>₦{plan.price.toLocaleString()}</div>
                     <p className={`text-white/90 text-[11px] font-semibold mt-0.5`}>{getCorrectDurationDisplay(plan.durationHours).toUpperCase()}</p>
                   </div>
-                  <div className={`inline-flex items-center gap-2 font-bold text-[#7c2d12] bg-white px-3 py-1.5 rounded-xl shadow-sm`}> 
+                  <div className={`inline-flex items-center gap-2 font-bold text-[#7c2d12] bg-white px-3 py-1.5 rounded-xl shadow-sm`}>
                     <span>Get Now</span>
                     <ChevronRight className="w-4 h-4" />
                   </div>
@@ -127,7 +139,7 @@ export const PlansList: React.FC<PlansListProps> = ({ showAll = false, onSeeAllC
           onClose={() => setSelectedPlan(null)}
         />
       )}
-      
+
       {/* Consistent bottom spacing */}
       <div className="h-8"></div>
     </div>
