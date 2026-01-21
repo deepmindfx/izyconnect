@@ -118,14 +118,16 @@ export const PlansList: React.FC<PlansListProps> = ({ showAll = false, onSeeAllC
                 </div>
 
                 {/* Footer gradient bar (matches Upgrade Account colors) */}
-                <div className={`p-4 flex items-center justify-between rounded-b-3xl bg-gradient-to-r from-[#f27e31] via-[#d96d2b] to-[#b3521b]`}>
-                  <div>
-                    <div className={`leading-none text-white font-black text-xl drop-shadow`}>₦{plan.price.toLocaleString()}</div>
-                    <p className={`text-white/90 text-[11px] font-semibold mt-0.5`}>{getCorrectDurationDisplay(plan.durationHours).toUpperCase()}</p>
-                  </div>
-                  <div className={`inline-flex items-center gap-2 font-bold text-[#7c2d12] bg-white px-3 py-1.5 rounded-xl shadow-sm`}>
-                    <span>Get Now</span>
-                    <ChevronRight className="w-4 h-4" />
+                <div className={`p-4 rounded-b-3xl bg-gradient-to-r from-[#f27e31] via-[#d96d2b] to-[#b3521b]`}>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex-shrink-0">
+                      <div className={`leading-none text-white font-black text-xl drop-shadow`}>₦{plan.price.toLocaleString()}</div>
+                      <p className={`text-white/90 text-[11px] font-semibold mt-0.5`}>{getCorrectDurationDisplay(plan.durationHours).toUpperCase()}</p>
+                    </div>
+                    <div className={`flex-shrink-0 inline-flex items-center gap-1.5 font-bold text-[#7c2d12] bg-white px-3 py-1.5 rounded-xl shadow-sm text-sm`}>
+                      <span>Get Now</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </div>
                   </div>
                 </div>
               </div>
