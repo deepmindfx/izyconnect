@@ -29,9 +29,10 @@ interface TransferModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  darkMode?: boolean;
 }
 
-export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, onSuccess }) => {
+export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, onSuccess, darkMode = false }) => {
   const { user, refreshSession } = useAuth();
   const [step, setStep] = useState<'recipient' | 'amount' | 'confirm'>('recipient');
   const [recipient, setRecipient] = useState('');
@@ -226,11 +227,11 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
   if (!transferSettings?.transfer_enabled) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-        <Card className="w-full max-w-md p-6">
+        <Card className={`w-full max-w-md p-6 ${darkMode ? 'bg-zinc-900 border-zinc-800' : ''}`}>
           <div className="text-center">
             <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Transfer Unavailable</h3>
-            <p className="text-gray-600 mb-4">The transfer feature is currently disabled by administrators.</p>
+            <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Transfer Unavailable</h3>
+            <p className={`mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>The transfer feature is currently disabled by administrators.</p>
             <Button onClick={onClose} className="w-full">
               Close
             </Button>
@@ -242,26 +243,26 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-md p-6">
+      <Card className={`w-full max-w-md p-6 ${darkMode ? 'bg-zinc-900 border-zinc-800' : ''}`}>
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Transfer Funds</h3>
+          <h3 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Transfer Funds</h3>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className={`p-2 rounded-full transition-colors ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-100'}`}
           >
-            <X size={20} className="text-gray-500" />
+            <X size={20} className={darkMode ? 'text-gray-400' : 'text-gray-500'} />
           </button>
         </div>
 
         {/* Disclaimer */}
-        <div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+        <div className={`mb-4 p-3 rounded-lg border ${darkMode ? 'bg-orange-900/20 border-orange-800/50' : 'bg-orange-50 border-orange-200'}`}>
           <div className="flex items-start gap-2">
-            <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${darkMode ? 'bg-orange-900/50' : 'bg-orange-100'}`}>
               <span className="text-orange-600 text-xs font-bold">i</span>
             </div>
             <div>
-              <p className="text-orange-800 text-sm font-medium">IzyConnect Wallet Transfer</p>
-              <p className="text-orange-700 text-xs mt-1">
+              <p className={`text-sm font-medium ${darkMode ? 'text-orange-400' : 'text-orange-800'}`}>IzyConnect Wallet Transfer</p>
+              <p className={`text-xs mt-1 ${darkMode ? 'text-orange-300' : 'text-orange-700'}`}>
                 This feature allows you to transfer funds between IzyConnect wallets only.
                 You can send money to other users using their email or phone number.
               </p>
@@ -270,16 +271,16 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
+          <div className={`mb-4 p-3 rounded-lg flex items-center gap-2 border ${darkMode ? 'bg-red-900/20 border-red-800/50' : 'bg-red-50 border-red-200'}`}>
             <AlertCircle size={16} className="text-red-500" />
-            <span className="text-red-700 text-sm">{error}</span>
+            <span className={`text-sm ${darkMode ? 'text-red-400' : 'text-red-700'}`}>{error}</span>
           </div>
         )}
 
         {step === 'recipient' && (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 Recipient Email or Phone
               </label>
               <Input
@@ -287,12 +288,13 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
                 onChange={setRecipient}
                 placeholder="Enter email or phone number"
                 type="text"
+                className={darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : ''}
               />
             </div>
             <Button
               onClick={findRecipient}
               disabled={loading || !recipient.trim()}
-              className="w-full"
+              className={`w-full ${darkMode ? 'bg-[#FF5F00] hover:bg-[#E65600] text-white' : ''}`}
             >
               {loading ? (
                 <>
@@ -311,25 +313,25 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
 
         {step === 'amount' && recipientUser && (
           <div className="space-y-4">
-            <div className="p-4 bg-orange-50 rounded-lg">
+            <div className={`p-4 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-orange-50'}`}>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${darkMode ? 'bg-zinc-700' : 'bg-orange-100'}`}>
                   <User size={20} className="text-orange-600" />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                     {recipientUser.firstName && recipientUser.lastName
                       ? `${recipientUser.firstName} ${recipientUser.lastName}`
                       : recipientUser.email
                     }
                   </p>
-                  <p className="text-sm text-gray-600">{recipientUser.email}</p>
+                  <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{recipientUser.email}</p>
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 Transfer Amount (₦)
               </label>
               <Input
@@ -337,11 +339,12 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
                 onChange={setAmount}
                 placeholder={`Min: ₦${transferSettings.transfer_min_amount}, Max: ₦${transferSettings.transfer_max_amount}`}
                 type="number"
+                className={darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : ''}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 Note (Optional)
               </label>
               <Input
@@ -349,22 +352,23 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
                 onChange={setNote}
                 placeholder="Add a note for this transfer"
                 type="text"
+                className={darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : ''}
               />
             </div>
 
             {amount && parseFloat(amount) > 0 && (
-              <div className="p-4 bg-gray-50 rounded-lg space-y-2">
+              <div className={`p-4 rounded-lg space-y-2 ${darkMode ? 'bg-zinc-800' : 'bg-gray-50'}`}>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Transfer Amount:</span>
-                  <span className="font-medium">₦{parseFloat(amount).toLocaleString()}</span>
+                  <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Transfer Amount:</span>
+                  <span className={`font-medium ${darkMode ? 'text-white' : ''}`}>₦{parseFloat(amount).toLocaleString()}</span>
                 </div>
                 {transferSettings.transfer_charge_enabled && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Transfer Charge:</span>
-                    <span className="font-medium">₦{calculateCharge(parseFloat(amount)).toLocaleString()}</span>
+                    <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Transfer Charge:</span>
+                    <span className={`font-medium ${darkMode ? 'text-white' : ''}`}>₦{calculateCharge(parseFloat(amount)).toLocaleString()}</span>
                   </div>
                 )}
-                <div className="border-t pt-2 flex justify-between font-semibold">
+                <div className={`border-t pt-2 flex justify-between font-semibold ${darkMode ? 'border-zinc-700 text-white' : 'border-gray-200'}`}>
                   <span>Total Deduction:</span>
                   <span>₦{(parseFloat(amount) + calculateCharge(parseFloat(amount))).toLocaleString()}</span>
                 </div>
@@ -375,14 +379,14 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
               <Button
                 onClick={() => setStep('recipient')}
                 variant="outline"
-                className="flex-1"
+                className={`flex-1 ${darkMode ? 'bg-transparent border-zinc-700 text-white hover:bg-zinc-800' : ''}`}
               >
                 Back
               </Button>
               <Button
                 onClick={proceedToConfirm}
                 disabled={!amount || parseFloat(amount) <= 0}
-                className="flex-1"
+                className={`flex-1 ${darkMode ? 'bg-[#FF5F00] hover:bg-[#E65600] text-white' : ''}`}
               >
                 Continue
               </Button>
@@ -394,25 +398,25 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
           <div className="space-y-4">
             <div className="text-center">
               <CheckCircle className="w-12 h-12 text-orange-500 mx-auto mb-4" />
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">Confirm Transfer</h4>
+              <h4 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Confirm Transfer</h4>
             </div>
 
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-gray-600">To:</span>
-                <span className="font-medium">{recipientUser.email}</span>
+                <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>To:</span>
+                <span className={`font-medium ${darkMode ? 'text-white' : ''}`}>{recipientUser.email}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Amount:</span>
-                <span className="font-medium">₦{parseFloat(amount).toLocaleString()}</span>
+                <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Amount:</span>
+                <span className={`font-medium ${darkMode ? 'text-white' : ''}`}>₦{parseFloat(amount).toLocaleString()}</span>
               </div>
               {transferSettings.transfer_charge_enabled && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Charge:</span>
-                  <span className="font-medium">₦{calculateCharge(parseFloat(amount)).toLocaleString()}</span>
+                  <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Charge:</span>
+                  <span className={`font-medium ${darkMode ? 'text-white' : ''}`}>₦{calculateCharge(parseFloat(amount)).toLocaleString()}</span>
                 </div>
               )}
-              <div className="border-t pt-2 flex justify-between font-semibold">
+              <div className={`border-t pt-2 flex justify-between font-semibold ${darkMode ? 'border-zinc-700 text-white' : 'border-gray-200'}`}>
                 <span>Total Deduction:</span>
                 <span>₦{(parseFloat(amount) + calculateCharge(parseFloat(amount))).toLocaleString()}</span>
               </div>
@@ -422,14 +426,14 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
               <Button
                 onClick={() => setStep('amount')}
                 variant="outline"
-                className="flex-1"
+                className={`flex-1 ${darkMode ? 'bg-transparent border-zinc-700 text-white hover:bg-zinc-800' : ''}`}
               >
                 Back
               </Button>
               <Button
                 onClick={executeTransfer}
                 disabled={loading}
-                className="flex-1"
+                className={`flex-1 ${darkMode ? 'bg-[#FF5F00] hover:bg-[#E65600] text-white' : ''}`}
               >
                 {loading ? (
                   <>

@@ -1,17 +1,19 @@
 import React from 'react';
-import { Home, Zap, Gift, User, Grid } from 'lucide-react';
+import { Home, Zap, Gift, User, ShoppingCart } from 'lucide-react';
 
 type ActivePage = 'home' | 'plan' | 'rewards' | 'settings' | 'menu';
 
 interface BottomNavigationProps {
   activePage: ActivePage;
   onPageChange: (page: ActivePage) => void;
+  onQuickBuy?: () => void;
   darkMode?: boolean;
 }
 
 export const BottomNavigation: React.FC<BottomNavigationProps> = ({
   activePage,
   onPageChange,
+  onQuickBuy,
   darkMode = false,
 }) => {
   return (
@@ -25,13 +27,13 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
           </svg>
         </div>
 
-        {/* Central Floating Button */}
+        {/* Central Floating Button - Quick Buy */}
         <div className="absolute bottom-[35px] left-1/2 -translate-x-1/2 z-20">
           <button
-            onClick={() => onPageChange('menu')}
-            className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-95 transition-all ${darkMode ? 'bg-[#FFCC00] shadow-yellow-500/20' : 'bg-[#FF5F00] shadow-orange-500/30'}`}
+            onClick={() => onQuickBuy?.()}
+            className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-95 transition-all ${darkMode ? 'bg-[#FF5F00] shadow-orange-500/20' : 'bg-[#FF5F00] shadow-orange-500/30'}`}
           >
-            <Grid size={28} className={darkMode ? 'text-black' : 'text-white'} />
+            <ShoppingCart size={28} className="text-white" />
           </button>
         </div>
 
@@ -40,14 +42,14 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
           <div className="flex gap-8 mb-2 ml-2">
             <button
               onClick={() => onPageChange('home')}
-              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'home' ? (darkMode ? 'text-[#FFCC00]' : 'text-[#FF5F00]') : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
+              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'home' ? 'text-[#FF5F00]' : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
             >
               <Home size={22} fill={activePage === 'home' ? "currentColor" : "none"} />
               <span className="text-[10px] font-medium">Home</span>
             </button>
             <button
               onClick={() => onPageChange('plan')}
-              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'plan' ? (darkMode ? 'text-[#FFCC00]' : 'text-[#FF5F00]') : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
+              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'plan' ? 'text-[#FF5F00]' : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
             >
               <Zap size={22} fill={activePage === 'plan' ? "currentColor" : "none"} />
               <span className="text-[10px] font-medium">Plans</span>
@@ -61,14 +63,14 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
           <div className="flex gap-8 mb-2 mr-2">
             <button
               onClick={() => onPageChange('rewards')}
-              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'rewards' ? (darkMode ? 'text-[#FFCC00]' : 'text-[#FF5F00]') : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
+              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'rewards' ? 'text-[#FF5F00]' : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
             >
               <Gift size={22} />
               <span className="text-[10px] font-medium">Referrals</span>
             </button>
             <button
               onClick={() => onPageChange('settings')}
-              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'settings' ? (darkMode ? 'text-[#FFCC00]' : 'text-[#FF5F00]') : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
+              className={`flex flex-col items-center gap-1 transition-colors ${activePage === 'settings' ? 'text-[#FF5F00]' : (darkMode ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600')}`}
             >
               <User size={22} fill={activePage === 'settings' ? "currentColor" : "none"} />
               <span className="text-[10px] font-medium">Settings</span>

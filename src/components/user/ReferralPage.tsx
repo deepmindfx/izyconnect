@@ -6,7 +6,11 @@ import { useData } from '../../contexts/DataContext';
 import { Copy, Users, DollarSign, Share2, TrendingUp, Gift, ArrowRight, Star, Sparkles } from 'lucide-react';
 import { supabase } from '../../utils/supabase';
 
-export const ReferralPage: React.FC = () => {
+interface ReferralPageProps {
+  darkMode?: boolean;
+}
+
+export const ReferralPage: React.FC<ReferralPageProps> = ({ darkMode = false }) => {
   const { user } = useAuth();
   const { getAllPurchases } = useData();
   const [copied, setCopied] = useState(false);
@@ -183,37 +187,40 @@ export const ReferralPage: React.FC = () => {
         <div className="w-24 h-24 mx-auto mb-2">
           <img src="/starline-logo.png" alt="IzyConnect" className="w-full h-full object-contain" />
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
+        <h1 className={`text-3xl sm:text-4xl font-black ${darkMode ? 'text-white' : 'text-gray-900'} tracking-tight`}>
           Refer & Earn
         </h1>
-        <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto">
+        <p className={`text-base sm:text-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'} max-w-xl mx-auto`}>
           Earn 10% commission on every purchase your friends make.
         </p>
       </div>
 
       {/* Referral Code Card */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-xl">
+      <div className={`rounded-3xl p-6 sm:p-8 shadow-xl ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-gray-100'}`}>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Your Referral Code</h2>
-            <p className="text-gray-600">Share this unique code with friends and family</p>
+            <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Your Referral Code</h2>
+            <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Share this unique code with friends and family</p>
           </div>
-          <div className="bg-orange-50 px-4 py-3 rounded-2xl border border-orange-100">
-            <span className="text-[#d96d2b] text-sm font-semibold">Minimum payout: ₦{minPayout}</span>
+          <div className={`${darkMode ? 'bg-orange-900/30 border-orange-800/50' : 'bg-orange-50 border-orange-100'} px-4 py-3 rounded-2xl border`}>
+            <span className={`${darkMode ? 'text-orange-400' : 'text-[#d96d2b]'} text-sm font-semibold`}>Minimum payout: ₦{minPayout}</span>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm mb-5">
+        <div className={`rounded-2xl border p-5 shadow-sm mb-5 ${darkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-gray-100'}`}>
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs text-gray-500">Referral Code</p>
-              <p className="text-3xl font-black text-[#b3521b] tracking-wide">{user?.referralCode}</p>
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Referral Code</p>
+              <p className={`text-3xl font-black ${darkMode ? 'text-orange-500' : 'text-[#b3521b]'} tracking-wide`}>{user?.referralCode}</p>
             </div>
             <Button
               variant="outline"
               size="sm"
               onClick={copyReferralCode}
-              className="flex items-center gap-2 bg-white border-2 border-blue-200 text-blue-700 font-semibold rounded-xl hover:bg-orange-50 hover:border-blue-300 transition-all duration-200 shadow-sm hover:shadow"
+              className={`flex items-center gap-2 font-semibold rounded-xl transition-all duration-200 shadow-sm hover:shadow ${darkMode
+                ? 'bg-zinc-700 border-zinc-600 text-blue-400 hover:bg-zinc-600'
+                : 'bg-white border-2 border-blue-200 text-blue-700 hover:bg-orange-50 hover:border-blue-300'
+                }`}
             >
               <Copy size={16} />
               {copied ? 'Copied!' : 'Copy'}
@@ -226,7 +233,10 @@ export const ReferralPage: React.FC = () => {
             type="text"
             value={referralUrl}
             readOnly
-            className="flex-1 px-4 py-3 border border-gray-200 rounded-2xl bg-white text-sm font-medium focus:ring-2 focus:ring-[#f27e31]/30 focus:border-[#f27e31]/40 transition-all duration-200 min-w-0"
+            className={`flex-1 px-4 py-3 border rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#f27e31]/30 focus:border-[#f27e31]/40 transition-all duration-200 min-w-0 ${darkMode
+              ? 'bg-zinc-800 border-zinc-700 text-gray-300'
+              : 'border-gray-200 bg-white text-gray-900'
+              }`}
           />
           <Button
             variant="outline"
@@ -238,10 +248,13 @@ export const ReferralPage: React.FC = () => {
           </Button>
         </div>
 
-        <div className="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-2xl border border-orange-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className={`mt-6 p-5 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${darkMode
+          ? 'bg-gradient-to-r from-blue-900/20 to-indigo-900/20 border-zinc-800'
+          : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-orange-100'
+          }`}>
           <div className="flex-1">
-            <p className="text-sm text-blue-800 font-semibold">Your earnings</p>
-            <p className="text-xl text-[#b3521b] font-black">₦{myEarnings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+            <p className={`text-sm font-semibold ${darkMode ? 'text-blue-400' : 'text-blue-800'}`}>Your earnings</p>
+            <p className={`text-xl font-black ${darkMode ? 'text-orange-500' : 'text-[#b3521b]'}`}>₦{myEarnings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           </div>
           <Button
             onClick={requestPayout}
@@ -252,17 +265,20 @@ export const ReferralPage: React.FC = () => {
           </Button>
         </div>
         {payoutMessage && (
-          <div className="mt-3 bg-orange-50 border border-orange-100 text-blue-800 px-4 py-3 rounded-2xl text-sm font-medium">
+          <div className={`mt-3 border px-4 py-3 rounded-2xl text-sm font-medium ${darkMode
+            ? 'bg-orange-900/20 border-orange-800/50 text-blue-300'
+            : 'bg-orange-50 border-orange-100 text-blue-800'
+            }`}>
             {payoutMessage}
           </div>
         )}
       </div>
 
       {/* Referral Statistics */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-xl">
+      <div className={`rounded-3xl p-6 sm:p-8 shadow-xl ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-gray-100'}`}>
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Referral Statistics</h2>
-          <p className="text-gray-600">Track your referral success and earnings</p>
+          <h2 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Referral Statistics</h2>
+          <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Track your referral success and earnings</p>
         </div>
 
         {myReferrals.length > 0 ? (
@@ -285,7 +301,7 @@ export const ReferralPage: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="font-bold text-xl max-[450px]:text-lg text-gray-900 mb-4 max-[450px]:mb-3 flex items-center gap-2">
+              <h3 className={`font-bold text-xl max-[450px]:text-lg mb-4 max-[450px]:mb-3 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 <TrendingUp className="text-blue-600" size={24} />
                 Your Referrals
               </h3>
@@ -295,17 +311,20 @@ export const ReferralPage: React.FC = () => {
                   const userEarnings = userPurchases.reduce((total, purchase) => total + (purchase.amount * 0.1), 0);
 
                   return (
-                    <div key={referredUser.id} className="bg-white p-4 max-[450px]:p-3 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div key={referredUser.id} className={`p-4 max-[450px]:p-3 rounded-2xl border shadow-sm hover:shadow-md transition-all duration-200 ${darkMode
+                      ? 'bg-zinc-800 border-zinc-700'
+                      : 'bg-white border-gray-100'
+                      }`}>
                       <div className="flex justify-between items-center max-[450px]:flex-col max-[450px]:items-start max-[450px]:gap-2">
                         <div className="max-[450px]:w-full">
-                          <p className="font-bold text-gray-900 text-sm max-[450px]:text-xs truncate">{referredUser.email}</p>
-                          <p className="text-sm max-[450px]:text-xs text-gray-600">
+                          <p className={`font-bold text-sm max-[450px]:text-xs truncate ${darkMode ? 'text-white' : 'text-gray-900'}`}>{referredUser.email}</p>
+                          <p className={`text-sm max-[450px]:text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                             Joined {new Date(referredUser.createdAt).toLocaleDateString()}
                           </p>
                         </div>
                         <div className="text-right max-[450px]:text-left max-[450px]:w-full max-[450px]:flex max-[450px]:justify-between max-[450px]:items-center">
                           <p className="font-bold text-xl max-[450px]:text-lg text-orange-600">₦{userEarnings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                          <p className="text-sm max-[450px]:text-xs text-gray-600">{userPurchases.length} purchases</p>
+                          <p className={`text-sm max-[450px]:text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{userPurchases.length} purchases</p>
                         </div>
                       </div>
                     </div>
@@ -319,57 +338,66 @@ export const ReferralPage: React.FC = () => {
             <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-3xl flex items-center justify-center mx-auto mb-6 animate-pulse">
               <Users className="text-blue-400" size={32} />
             </div>
-            <p className="text-gray-600 mb-2 text-lg font-medium">Loading referrals...</p>
+            <p className={`mb-2 text-lg font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Loading referrals...</p>
           </div>
         ) : (
           <div className="text-center py-12">
-            <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center mx-auto mb-6">
-              <Users className="text-gray-400" size={32} />
+            <div className={`w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 ${darkMode ? 'bg-zinc-800' : 'bg-gradient-to-br from-gray-100 to-gray-200'}`}>
+              <Users className={darkMode ? 'text-zinc-600' : 'text-gray-400'} size={32} />
             </div>
-            <p className="text-gray-600 mb-2 text-lg font-medium">No referral data available yet</p>
+            <p className={`mb-2 text-lg font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>No referral data available yet</p>
             <p className="text-gray-500">Start sharing your referral code to see your earnings here!</p>
           </div>
         )}
       </div>
 
       {/* How it Works */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-xl">
+      <div className={`rounded-3xl p-6 sm:p-8 shadow-xl ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-gray-100'}`}>
         <div className="text-center mb-6 sm:mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">How it Works</h2>
-          <p className="text-gray-600">Simple steps to start earning with referrals</p>
+          <h2 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>How it Works</h2>
+          <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Simple steps to start earning with referrals</p>
         </div>
 
         <div className="space-y-4">
           {/* Step 1 */}
-          <div className="flex gap-4 items-start p-4 rounded-2xl border border-gray-100 bg-gray-50/60">
+          <div className={`flex gap-4 items-start p-4 rounded-2xl border ${darkMode
+            ? 'bg-zinc-800/50 border-zinc-700'
+            : 'bg-gray-50/60 border-gray-100'
+            }`}>
             <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-extrabold bg-gradient-to-br from-[#f27e31] to-[#b3521b] shadow-sm">
               1
             </div>
             <div className="flex-1">
-              <p className="font-bold text-gray-900 leading-tight">{howItWorks.step1Title}</p>
-              <p className="text-gray-600 text-sm mt-1">{howItWorks.step1Desc}</p>
+              <p className={`font-bold leading-tight ${darkMode ? 'text-white' : 'text-gray-900'}`}>{howItWorks.step1Title}</p>
+              <p className={`text-sm mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{howItWorks.step1Desc}</p>
             </div>
           </div>
 
           {/* Step 2 */}
-          <div className="flex gap-4 items-start p-4 rounded-2xl border border-gray-100 bg-gray-50/60">
+          <div className={`flex gap-4 items-start p-4 rounded-2xl border ${darkMode
+            ? 'bg-zinc-800/50 border-zinc-700'
+            : 'bg-gray-50/60 border-gray-100'
+            }`}>
             <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-extrabold bg-gradient-to-br from-[#f27e31] to-[#b3521b] shadow-sm">
               2
             </div>
             <div className="flex-1">
-              <p className="font-bold text-gray-900 leading-tight">{howItWorks.step2Title}</p>
-              <p className="text-gray-600 text-sm mt-1">{howItWorks.step2Desc}</p>
+              <p className={`font-bold leading-tight ${darkMode ? 'text-white' : 'text-gray-900'}`}>{howItWorks.step2Title}</p>
+              <p className={`text-sm mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{howItWorks.step2Desc}</p>
             </div>
           </div>
 
           {/* Step 3 */}
-          <div className="flex gap-4 items-start p-4 rounded-2xl border border-gray-100 bg-gray-50/60">
+          <div className={`flex gap-4 items-start p-4 rounded-2xl border ${darkMode
+            ? 'bg-zinc-800/50 border-zinc-700'
+            : 'bg-gray-50/60 border-gray-100'
+            }`}>
             <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-extrabold bg-gradient-to-br from-[#f27e31] to-[#b3521b] shadow-sm">
               3
             </div>
             <div className="flex-1">
-              <p className="font-bold text-gray-900 leading-tight">{howItWorks.step3Title}</p>
-              <p className="text-gray-600 text-sm mt-1">{howItWorks.step3Desc}</p>
+              <p className={`font-bold leading-tight ${darkMode ? 'text-white' : 'text-gray-900'}`}>{howItWorks.step3Title}</p>
+              <p className={`text-sm mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{howItWorks.step3Desc}</p>
             </div>
           </div>
         </div>

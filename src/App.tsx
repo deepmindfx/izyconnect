@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { DataProvider } from './contexts/DataContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthForm } from './components/auth/AuthForm';
 import { LandingPage } from './components/LandingPage';
 import { UserDashboard } from './components/user/UserDashboard';
@@ -112,7 +113,9 @@ function App() {
   return (
     <AuthProvider>
       <DataProvider>
-        <AppContent />
+        <ThemeProvider>
+          <AppContent />
+        </ThemeProvider>
       </DataProvider>
     </AuthProvider>
   );

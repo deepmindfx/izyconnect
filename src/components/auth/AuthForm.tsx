@@ -3,6 +3,9 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Input } from '../ui/Input';
 // No icon import; using brand logo image
 import { secureStorage } from '../../utils/secureStorage';
+// New imports for theme
+import { useTheme } from '../../contexts/ThemeContext';
+import { Sun, Moon } from 'lucide-react';
 
 interface AuthFormProps {
   isAdmin?: boolean;
@@ -25,6 +28,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
   const [resetMessage, setResetMessage] = useState('');
 
   const { login, register, adminLogin, resetPassword, profileLoading, authUser } = useAuth();
+  const { theme, toggleTheme, isDark } = useTheme();
 
   // Load saved credentials on component mount and optionally auto-login
   React.useEffect(() => {
@@ -102,21 +106,30 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className={`min-h-screen flex items-center justify-center p-4 transition-colors duration-300 ${isDark ? 'bg-black' : 'bg-gradient-to-br from-orange-50 via-white to-orange-50'}`}>
+      <div className="w-full max-w-md relative">
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className={`absolute top-4 right-4 z-20 p-2 rounded-full transition-colors ${isDark ? 'bg-zinc-800 text-yellow-400 hover:bg-zinc-700' : 'bg-white text-gray-500 hover:text-orange-500 shadow-sm'}`}
+          aria-label="Toggle theme"
+        >
+          {isDark ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
+
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-400/10 to-orange-400/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-orange-300/10 to-orange-300/10 rounded-full blur-3xl"></div>
+          <div className={`absolute -top-40 -right-40 w-80 h-80 rounded-full blur-3xl ${isDark ? 'bg-orange-900/10' : 'bg-gradient-to-br from-orange-400/10 to-orange-400/10'}`}></div>
+          <div className={`absolute -bottom-40 -left-40 w-80 h-80 rounded-full blur-3xl ${isDark ? 'bg-orange-900/10' : 'bg-gradient-to-br from-orange-300/10 to-orange-300/10'}`}></div>
         </div>
 
-        <div className="relative bg-white/90 backdrop-blur-2xl rounded-[2.5rem] p-8 md:p-12 border border-white/50 shadow-2xl shadow-orange-500/10">
+        <div className={`relative backdrop-blur-2xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl transition-colors duration-300 ${isDark ? 'bg-zinc-900 border border-zinc-800 shadow-black/50' : 'bg-white/90 border border-white/50 shadow-orange-500/10'}`}>
           {/* Subtle loading indicator for auth check */}
           {profileLoading && (
-            <div className="mb-6 p-4 bg-orange-50/80 backdrop-blur-sm border border-orange-100 rounded-2xl">
+            <div className={`mb-6 p-4 backdrop-blur-sm border rounded-2xl ${isDark ? 'bg-orange-900/20 border-orange-800/50' : 'bg-orange-50/80 border-orange-100'}`}>
               <div className="flex items-center gap-3 text-orange-700 text-sm">
                 <div className="w-4 h-4 border-2 border-[#FF5F00] border-t-transparent rounded-full animate-spin"></div>
-                <span className="font-medium">Checking authentication...</span>
+                <span className={`font-medium ${isDark ? 'text-orange-300' : 'text-orange-700'}`}>Checking authentication...</span>
               </div>
             </div>
           )}
@@ -124,7 +137,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
           <div className="text-center mb-10">
             <div className="relative w-24 h-24 mx-auto mb-8 group">
               <div className="absolute inset-0 bg-gradient-to-br from-[#FF5F00] to-[#FF9000] rounded-3xl shadow-xl shadow-orange-500/20 group-hover:shadow-orange-500/30 transition-all duration-500 rotate-6 group-hover:rotate-12"></div>
-              <div className="absolute inset-0 bg-white rounded-3xl flex items-center justify-center transform transition-all duration-500 -rotate-3 group-hover:rotate-0">
+              <div className={`absolute inset-0 rounded-3xl flex items-center justify-center transform transition-all duration-500 -rotate-3 group-hover:rotate-0 ${isDark ? 'bg-zinc-900' : 'bg-white'}`}>
                 <img
                   src="/starline-logo.png"
                   alt="IzyConnect"
@@ -132,10 +145,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
                 />
               </div>
             </div>
-            <h1 className={`text-4xl font-extrabold mb-3 tracking-tight ${isAdmin ? 'text-gray-900' : 'text-gray-900'}`}>
+            <h1 className={`text-4xl font-extrabold mb-3 tracking-tight ${isAdmin ? 'text-gray-900' : (isDark ? 'text-white' : 'text-gray-900')}`}>
               {isAdmin ? 'Admin Portal' : (isLogin ? 'Welcome Back!' : 'Create Account')}
             </h1>
-            <p className="text-gray-500 text-lg">
+            <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
               {isAdmin ? 'Secure admin access' : (isLogin ? 'Sign in to manage your internet' : 'Join thousands of connected users')}
             </p>
           </div>
@@ -191,7 +204,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className="w-4 h-4 text-[#f27e31] bg-white border-gray-300 rounded focus:ring-[#f27e31] focus:ring-2"
                   />
-                  <label htmlFor="rememberMe" className="text-gray-700 text-sm font-medium cursor-pointer hover:text-gray-900 transition-colors">
+                  <label htmlFor="rememberMe" className={`text-sm font-medium cursor-pointer transition-colors ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'}`}>
                     Remember me
                   </label>
                 </div>
@@ -206,14 +219,14 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
             )}
 
             {isLogin && !isAdmin && rememberMe && email && password && (
-              <div className="text-xs text-orange-600 font-medium bg-orange-50 px-3 py-2 rounded-lg">
+              <div className={`text-xs font-medium px-3 py-2 rounded-lg ${isDark ? 'bg-orange-900/30 text-orange-400' : 'bg-orange-50 text-orange-600'}`}>
                 ✓ Credentials will be saved for quick login
               </div>
             )}
 
             {error && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-2xl">
-                <div className="flex items-center gap-3 text-red-700 text-sm">
+              <div className={`p-4 border rounded-2xl ${isDark ? 'bg-red-900/20 border-red-800/50' : 'bg-red-50 border-red-200'}`}>
+                <div className={`flex items-center gap-3 text-sm ${isDark ? 'text-red-300' : 'text-red-700'}`}>
                   <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
                     <span className="text-white text-xs font-bold">!</span>
                   </div>
@@ -245,10 +258,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
             {!isAdmin && (
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200"></div>
+                  <div className={`w-full border-t ${isDark ? 'border-zinc-800' : 'border-gray-200'}`}></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-gray-500">or</span>
+                  <span className={`px-4 ${isDark ? 'bg-zinc-900 text-gray-500' : 'bg-white text-gray-500'}`}>or</span>
                 </div>
               </div>
             )}
@@ -258,7 +271,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ isAdmin = false }) => {
                 <button
                   type="button"
                   onClick={() => setIsLogin(!isLogin)}
-                  className="inline-flex items-center gap-2 text-gray-500 hover:text-[#FF5F00] text-sm font-semibold transition-all duration-200 group"
+                  className={`inline-flex items-center gap-2 text-sm font-semibold transition-all duration-200 group ${isDark ? 'text-gray-400 hover:text-[#FF5F00]' : 'text-gray-500 hover:text-[#FF5F00]'}`}
                 >
                   {isLogin ? (
                     <>

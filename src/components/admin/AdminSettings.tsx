@@ -35,6 +35,12 @@ interface AdminSettings {
   flutterwave_public_key: string;
   flutterwave_webhook_secret: string;
   flutterwave_environment: 'test' | 'live';
+  // Paystack settings
+  paystack_secret_key: string;
+  paystack_public_key: string;
+  paystack_environment: 'test' | 'live';
+  // Gateway selection
+  active_payment_gateway: 'flutterwave' | 'paystack' | 'both';
 }
 
 export const AdminSettings: React.FC = () => {
@@ -66,6 +72,12 @@ export const AdminSettings: React.FC = () => {
     flutterwave_public_key: '',
     flutterwave_webhook_secret: '',
     flutterwave_environment: 'test',
+    // Paystack settings
+    paystack_secret_key: '',
+    paystack_public_key: '',
+    paystack_environment: 'test',
+    // Gateway selection
+    active_payment_gateway: 'flutterwave',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -79,13 +91,13 @@ export const AdminSettings: React.FC = () => {
       const { data: settingsData } = await supabase
         .from('admin_settings')
         .select('key, value');
-      
+
       if (settingsData) {
         const settingsMap = settingsData.reduce((acc: any, setting: any) => {
           acc[setting.key] = setting.value;
           return acc;
         }, {});
-        
+
         console.log('Loading settings from database:', settingsMap);
         setSettings({
           referral_enabled: settingsMap.referral_enabled === 'true',
@@ -115,6 +127,12 @@ export const AdminSettings: React.FC = () => {
           flutterwave_public_key: settingsMap.flutterwave_public_key || '',
           flutterwave_webhook_secret: settingsMap.flutterwave_webhook_secret || '',
           flutterwave_environment: settingsMap.flutterwave_environment || 'test',
+          // Paystack settings
+          paystack_secret_key: settingsMap.paystack_secret_key || '',
+          paystack_public_key: settingsMap.paystack_public_key || '',
+          paystack_environment: settingsMap.paystack_environment || 'test',
+          // Gateway selection
+          active_payment_gateway: settingsMap.active_payment_gateway || 'flutterwave',
         });
       }
     } catch (error) {
@@ -151,22 +169,33 @@ export const AdminSettings: React.FC = () => {
         { key: 'referral_howitworks_step2_desc', value: settings.referral_howitworks_step2_desc },
         { key: 'referral_howitworks_step3_title', value: settings.referral_howitworks_step3_title },
         { key: 'referral_howitworks_step3_desc', value: settings.referral_howitworks_step3_desc },
+        // Flutterwave settings
+        { key: 'flutterwave_secret_key', value: settings.flutterwave_secret_key },
+        { key: 'flutterwave_public_key', value: settings.flutterwave_public_key },
+        { key: 'flutterwave_webhook_secret', value: settings.flutterwave_webhook_secret },
+        { key: 'flutterwave_environment', value: settings.flutterwave_environment },
+        // Paystack settings
+        { key: 'paystack_secret_key', value: settings.paystack_secret_key },
+        { key: 'paystack_public_key', value: settings.paystack_public_key },
+        { key: 'paystack_environment', value: settings.paystack_environment },
+        // Gateway selection
+        { key: 'active_payment_gateway', value: settings.active_payment_gateway },
       ];
 
       for (const update of updates) {
         console.log('Saving update:', update);
-        
+
         // Use upsert with proper conflict resolution
         const { error } = await supabase
           .from('admin_settings')
           .upsert(
             { key: update.key, value: update.value },
-            { 
+            {
               onConflict: 'key',
-              ignoreDuplicates: false 
+              ignoreDuplicates: false
             }
           );
-        
+
         if (error) {
           console.error('Error saving setting:', update.key, error);
         }
@@ -197,7 +226,7 @@ export const AdminSettings: React.FC = () => {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold text-gray-900">System Settings</h2>
-      
+
       <Card className="p-6">
         <div className="flex items-center gap-3 mb-6">
           <Settings className="text-blue-600" size={24} />
@@ -222,7 +251,7 @@ export const AdminSettings: React.FC = () => {
                     Enable Referral Program
                   </label>
                 </div>
-                
+
                 <Input
                   label="Referral Reward Percentage (%)"
                   type="number"
@@ -230,7 +259,7 @@ export const AdminSettings: React.FC = () => {
                   onChange={(value) => updateSetting('referral_reward_percentage', parseFloat(value) || 0)}
                   placeholder="10"
                 />
-                
+
                 <Input
                   label="Minimum Purchase Amount (₦)"
                   type="number"
@@ -239,7 +268,7 @@ export const AdminSettings: React.FC = () => {
                   placeholder="100"
                 />
               </div>
-              
+
               <div className="p-4 bg-blue-50 rounded-lg">
                 <h5 className="font-medium text-blue-900 mb-2">Current Settings</h5>
                 <p className="text-sm text-blue-800">
@@ -270,7 +299,7 @@ export const AdminSettings: React.FC = () => {
                     Enable Funding Charges
                   </label>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Charge Type</label>
                   <select
@@ -282,7 +311,7 @@ export const AdminSettings: React.FC = () => {
                     <option value="fixed">Fixed Amount</option>
                   </select>
                 </div>
-                
+
                 <Input
                   label={`Charge Value (${settings.funding_charge_type === 'percentage' ? '%' : '₦'})`}
                   type="number"
@@ -290,7 +319,7 @@ export const AdminSettings: React.FC = () => {
                   onChange={(value) => updateSetting('funding_charge_value', parseFloat(value) || 0)}
                   placeholder="2"
                 />
-                
+
                 <Input
                   label="Minimum Deposit (₦)"
                   type="number"
@@ -298,7 +327,7 @@ export const AdminSettings: React.FC = () => {
                   onChange={(value) => updateSetting('funding_charge_min_deposit', parseFloat(value) || 0)}
                   placeholder="100"
                 />
-                
+
                 <Input
                   label="Maximum Deposit (₦, 0 = no limit)"
                   type="number"
@@ -307,16 +336,16 @@ export const AdminSettings: React.FC = () => {
                   placeholder="0"
                 />
               </div>
-              
+
               <div className="p-4 bg-yellow-50 rounded-lg">
                 <h5 className="font-medium text-yellow-900 mb-2">Current Settings</h5>
                 <p className="text-sm text-yellow-800">
                   {settings.funding_charge_enabled ? (
                     <>
-                      {settings.funding_charge_type === 'percentage' 
-                        ? `${settings.funding_charge_value}% charge` 
+                      {settings.funding_charge_type === 'percentage'
+                        ? `${settings.funding_charge_value}% charge`
                         : `₦${settings.funding_charge_value} fixed charge`
-                      } on deposits between ₦{settings.funding_charge_min_deposit} 
+                      } on deposits between ₦{settings.funding_charge_min_deposit}
                       {settings.funding_charge_max_deposit > 0 && ` and ₦${settings.funding_charge_max_deposit}`}
                     </>
                   ) : (
@@ -344,7 +373,7 @@ export const AdminSettings: React.FC = () => {
                     Enable User Transfers
                   </label>
                 </div>
-                
+
                 <Input
                   label="Minimum Transfer Amount (₦)"
                   type="number"
@@ -356,7 +385,7 @@ export const AdminSettings: React.FC = () => {
                   }}
                   placeholder="100"
                 />
-                
+
                 <Input
                   label="Maximum Transfer Amount (₦)"
                   type="number"
@@ -364,7 +393,7 @@ export const AdminSettings: React.FC = () => {
                   onChange={(value) => updateSetting('transfer_max_amount', parseFloat(value) || 0)}
                   placeholder="10000"
                 />
-                
+
                 <div className="flex items-center gap-3">
                   <input
                     type="checkbox"
@@ -377,7 +406,7 @@ export const AdminSettings: React.FC = () => {
                     Enable Transfer Charges
                   </label>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Transfer Charge Type</label>
                   <select
@@ -389,7 +418,7 @@ export const AdminSettings: React.FC = () => {
                     <option value="fixed">Fixed Amount</option>
                   </select>
                 </div>
-                
+
                 <Input
                   label={`Transfer Charge Value (${settings.transfer_charge_type === 'percentage' ? '%' : '₦'})`}
                   type="number"
@@ -398,7 +427,7 @@ export const AdminSettings: React.FC = () => {
                   placeholder="1"
                 />
               </div>
-              
+
               <div className="p-4 bg-green-50 rounded-lg">
                 <h5 className="font-medium text-green-900 mb-2">Current Settings</h5>
                 <p className="text-sm text-green-800">
@@ -408,8 +437,8 @@ export const AdminSettings: React.FC = () => {
                       {settings.transfer_charge_enabled && (
                         <>
                           <br />
-                          {settings.transfer_charge_type === 'percentage' 
-                            ? `${settings.transfer_charge_value}% charge` 
+                          {settings.transfer_charge_type === 'percentage'
+                            ? `${settings.transfer_charge_value}% charge`
                             : `₦${settings.transfer_charge_value} fixed charge`
                           } per transfer
                         </>
@@ -508,7 +537,7 @@ export const AdminSettings: React.FC = () => {
                     <option value="live">Live (Production)</option>
                   </select>
                 </div>
-                
+
                 <Input
                   label="Secret Key"
                   type="password"
@@ -516,14 +545,14 @@ export const AdminSettings: React.FC = () => {
                   onChange={(value) => updateSetting('flutterwave_secret_key', value)}
                   placeholder="FLWSECK-xxxxx or FLWSECK_TEST-xxxxx"
                 />
-                
+
                 <Input
                   label="Public Key"
                   value={settings.flutterwave_public_key}
                   onChange={(value) => updateSetting('flutterwave_public_key', value)}
                   placeholder="FLWPUBK-xxxxx or FLWPUBK_TEST-xxxxx"
                 />
-                
+
                 <Input
                   label="Webhook Secret (Optional)"
                   type="password"
@@ -532,7 +561,7 @@ export const AdminSettings: React.FC = () => {
                   placeholder="Webhook verification secret"
                 />
               </div>
-              
+
               <div className="p-4 bg-orange-50 rounded-lg">
                 <h5 className="font-medium text-orange-900 mb-2">Payment Configuration</h5>
                 <div className="text-sm text-orange-800 space-y-2">
@@ -540,8 +569,113 @@ export const AdminSettings: React.FC = () => {
                   <p><strong>Secret Key:</strong> {settings.flutterwave_secret_key ? '••••••••' : 'Not set'}</p>
                   <p><strong>Public Key:</strong> {settings.flutterwave_public_key ? '••••••••' : 'Not set'}</p>
                   <div className="mt-3 p-2 bg-orange-100 rounded text-xs">
-                    <strong>Note:</strong> Test keys start with FLWSECK_TEST- and FLWPUBK_TEST-. 
+                    <strong>Note:</strong> Test keys start with FLWSECK_TEST- and FLWPUBK_TEST-.
                     Live keys start with FLWSECK- and FLWPUBK-.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Paystack Settings */}
+          <div>
+            <h4 className="text-md font-semibold mb-4 text-gray-900">Paystack Payment Settings</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Environment</label>
+                  <select
+                    value={settings.paystack_environment}
+                    onChange={(e) => updateSetting('paystack_environment', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    <option value="test">Test (Sandbox)</option>
+                    <option value="live">Live (Production)</option>
+                  </select>
+                </div>
+
+                <Input
+                  label="Secret Key"
+                  type="password"
+                  value={settings.paystack_secret_key}
+                  onChange={(value) => updateSetting('paystack_secret_key', value)}
+                  placeholder="sk_test_xxxxx or sk_live_xxxxx"
+                />
+
+                <Input
+                  label="Public Key"
+                  value={settings.paystack_public_key}
+                  onChange={(value) => updateSetting('paystack_public_key', value)}
+                  placeholder="pk_test_xxxxx or pk_live_xxxxx"
+                />
+              </div>
+
+              <div className="p-4 bg-green-50 rounded-lg">
+                <h5 className="font-medium text-green-900 mb-2">Paystack Configuration</h5>
+                <div className="text-sm text-green-800 space-y-2">
+                  <p><strong>Environment:</strong> {settings.paystack_environment === 'test' ? 'Test (Sandbox)' : 'Live (Production)'}</p>
+                  <p><strong>Secret Key:</strong> {settings.paystack_secret_key ? '••••••••' : 'Not set'}</p>
+                  <p><strong>Public Key:</strong> {settings.paystack_public_key ? '••••••••' : 'Not set'}</p>
+                  <div className="mt-3 p-2 bg-green-100 rounded text-xs">
+                    <strong>Note:</strong> Test keys start with sk_test_ and pk_test_.
+                    Live keys start with sk_live_ and pk_live_.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Payment Gateway Selection */}
+          <div>
+            <h4 className="text-md font-semibold mb-4 text-gray-900">Active Payment Gateway</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div className="space-y-3">
+                  <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="gateway"
+                      value="flutterwave"
+                      checked={settings.active_payment_gateway === 'flutterwave'}
+                      onChange={(e) => updateSetting('active_payment_gateway', e.target.value)}
+                      className="w-4 h-4 text-orange-600"
+                    />
+                    <span className="font-medium text-gray-700">Flutterwave Only</span>
+                  </label>
+                  <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="gateway"
+                      value="paystack"
+                      checked={settings.active_payment_gateway === 'paystack'}
+                      onChange={(e) => updateSetting('active_payment_gateway', e.target.value)}
+                      className="w-4 h-4 text-green-600"
+                    />
+                    <span className="font-medium text-gray-700">Paystack Only</span>
+                  </label>
+                  <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="gateway"
+                      value="both"
+                      checked={settings.active_payment_gateway === 'both'}
+                      onChange={(e) => updateSetting('active_payment_gateway', e.target.value)}
+                      className="w-4 h-4 text-blue-600"
+                    />
+                    <span className="font-medium text-gray-700">Both (User's Choice)</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <h5 className="font-medium text-blue-900 mb-2">Gateway Status</h5>
+                <div className="text-sm text-blue-800 space-y-2">
+                  <p><strong>Active:</strong> {
+                    settings.active_payment_gateway === 'flutterwave' ? 'Flutterwave' :
+                      settings.active_payment_gateway === 'paystack' ? 'Paystack' : 'Both (User Choice)'
+                  }</p>
+                  <div className="mt-3 p-2 bg-blue-100 rounded text-xs">
+                    <strong>Note:</strong> When "Both" is selected, users can choose their preferred payment method during checkout.
                   </div>
                 </div>
               </div>

@@ -11,9 +11,10 @@ import { getCorrectDurationDisplay } from '../../utils/planDurationHelper';
 interface PlansListProps {
   showAll?: boolean;
   onSeeAllClick?: () => void;
+  darkMode?: boolean;
 }
 
-export const PlansList: React.FC<PlansListProps> = ({ showAll = false, onSeeAllClick }) => {
+export const PlansList: React.FC<PlansListProps> = ({ showAll = false, onSeeAllClick, darkMode = false }) => {
   const { plans, isPurchaseInProgress, loading } = useData();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 
@@ -24,17 +25,17 @@ export const PlansList: React.FC<PlansListProps> = ({ showAll = false, onSeeAllC
     return (
       <div className="space-y-4">
         {[1, 2].map((i) => (
-          <div key={i} className="bg-white rounded-2xl p-6 border border-gray-100 animate-pulse">
+          <div key={i} className={`rounded-2xl p-6 border animate-pulse ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-gray-100'}`}>
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 bg-gray-200 rounded-2xl"></div>
+              <div className={`w-12 h-12 rounded-2xl ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
               <div className="flex-1">
-                <div className="h-5 bg-gray-200 rounded w-28 mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-36"></div>
+                <div className={`h-5 rounded w-28 mb-2 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
+                <div className={`h-4 rounded w-36 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
               </div>
             </div>
             <div className="space-y-3">
-              <div className="h-5 bg-gray-200 rounded w-24"></div>
-              <div className="h-4 bg-gray-200 rounded w-20"></div>
+              <div className={`h-5 rounded w-24 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
+              <div className={`h-4 rounded w-20 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
             </div>
           </div>
         ))}
@@ -45,11 +46,11 @@ export const PlansList: React.FC<PlansListProps> = ({ showAll = false, onSeeAllC
   // Show empty state if no plans are found
   if (!loading && plans.length === 0) {
     return (
-      <div className="text-center py-10 px-4 bg-gray-50 rounded-2xl border border-gray-100">
-        <Wifi className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-        <h3 className="text-gray-900 font-semibold mb-1">No Plans Available</h3>
-        <p className="text-gray-500 text-sm">Check back later for new data bundles.</p>
-        <Button variant="outline" size="sm" className="mt-4" onClick={() => window.location.reload()}>
+      <div className={`text-center py-10 px-4 rounded-2xl border ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-gray-50 border-gray-100'}`}>
+        <Wifi className={`w-12 h-12 mx-auto mb-3 ${darkMode ? 'text-zinc-700' : 'text-gray-300'}`} />
+        <h3 className={`font-semibold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>No Plans Available</h3>
+        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Check back later for new data bundles.</p>
+        <Button variant="outline" size="sm" className={`mt-4 ${darkMode ? 'bg-zinc-800 text-white border-zinc-700 hover:bg-zinc-700' : ''}`} onClick={() => window.location.reload()}>
           Refresh
         </Button>
       </div>
@@ -89,8 +90,8 @@ export const PlansList: React.FC<PlansListProps> = ({ showAll = false, onSeeAllC
             <div
               key={plan.id}
               className={`group rounded-3xl relative p-[1px] transition-all duration-200 ${plan.popular
-                  ? 'bg-gradient-to-r from-[#f27e31] to-[#b3521b] hover:from-[#d96d2b] hover:to-[#7c2d12]'
-                  : 'bg-gradient-to-r from-[#E3F2FD] to-[#BBDEFB] hover:from-[#CFE8FF] hover:to-[#B7D6FF]'
+                ? 'bg-gradient-to-r from-[#f27e31] to-[#b3521b] hover:from-[#d96d2b] hover:to-[#7c2d12]'
+                : 'bg-gradient-to-r from-[#E3F2FD] to-[#BBDEFB] hover:from-[#CFE8FF] hover:to-[#B7D6FF]'
                 } ${isPurchaseInProgress ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:-translate-y-0.5'
                 }`}
               onClick={() => !isPurchaseInProgress && setSelectedPlan(plan)}

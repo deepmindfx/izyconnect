@@ -5,11 +5,11 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { supabase } from '../../utils/supabase';
-import { 
-  ArrowDownLeft, 
-  ArrowUpRight, 
-  Clock, 
-  CheckCircle, 
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  Clock,
+  CheckCircle,
   AlertCircle,
   Filter,
   Calendar,
@@ -59,7 +59,11 @@ interface TransactionRecord {
   };
 }
 
-export const TransactionHistory: React.FC = () => {
+interface TransactionHistoryProps {
+  darkMode?: boolean;
+}
+
+export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ darkMode = false }) => {
   const { user } = useAuth();
   const { plans, locations } = useData();
   const [transactions, setTransactions] = useState<TransactionRecord[]>([]);
@@ -103,7 +107,7 @@ export const TransactionHistory: React.FC = () => {
 
     try {
       setLoading(true);
-      
+
       // Load both transaction types with sender/recipient info
       const { data: dbTransactions, error: transactionError } = await supabase
         .from('transactions')
@@ -124,14 +128,6 @@ export const TransactionHistory: React.FC = () => {
 
       // Transform and combine transactions
       const transformedTransactions: TransactionRecord[] = (dbTransactions || []).map(tx => {
-        console.log('Processing transaction:', {
-          id: tx.id,
-          type: tx.type,
-          amount: tx.amount,
-          status: tx.status,
-          created_at: tx.created_at
-        });
-        
         return {
           ...tx,
           plan_name: tx.plans?.name,
@@ -144,7 +140,6 @@ export const TransactionHistory: React.FC = () => {
         };
       });
 
-      console.log('All transformed transactions:', transformedTransactions);
       setTransactions(transformedTransactions);
     } catch (error) {
       console.error('Error loading transactions:', error);
@@ -161,7 +156,7 @@ export const TransactionHistory: React.FC = () => {
     if (status === 'failed') return 'failed';
     if (status === 'active') return 'active';
     if (status === 'expired') return 'expired';
-    
+
     // Default based on type
     return type === 'wallet_funding' ? 'success' : 'active';
   };
@@ -181,15 +176,15 @@ export const TransactionHistory: React.FC = () => {
 
   const getTransactionColor = (type: string) => {
     if (type === 'wallet_funding' || type === 'wallet_topup') {
-      return 'bg-green-100';
+      return darkMode ? 'bg-green-900/20' : 'bg-green-100';
     }
     if (type === 'transfer_sent') {
-      return 'bg-red-100';
+      return darkMode ? 'bg-red-900/20' : 'bg-red-100';
     }
     if (type === 'transfer_received') {
-      return 'bg-green-100';
+      return darkMode ? 'bg-green-900/20' : 'bg-green-100';
     }
-    return 'bg-blue-100';
+    return darkMode ? 'bg-blue-900/20' : 'bg-blue-100';
   };
 
   const getStatusIcon = (status: string) => {
@@ -228,24 +223,18 @@ export const TransactionHistory: React.FC = () => {
     switch (status) {
       case 'success':
       case 'active':
-        return 'text-green-600 bg-green-50';
+        return darkMode ? 'text-green-400 bg-green-900/20' : 'text-green-600 bg-green-50';
       case 'pending':
-        return 'text-yellow-600 bg-yellow-50';
+        return darkMode ? 'text-yellow-400 bg-yellow-900/20' : 'text-yellow-600 bg-yellow-50';
       case 'failed':
       case 'expired':
-        return 'text-red-600 bg-red-50';
+        return darkMode ? 'text-red-400 bg-red-900/20' : 'text-red-600 bg-red-50';
       default:
-        return 'text-gray-600 bg-gray-50';
+        return darkMode ? 'text-gray-400 bg-zinc-800' : 'text-gray-600 bg-gray-50';
     }
   };
 
   const getTransactionTitle = (transaction: TransactionRecord) => {
-    console.log('Getting title for transaction:', {
-      id: transaction.id,
-      type: transaction.type,
-      plan_name: transaction.plan_name
-    });
-    
     if (transaction.type === 'wallet_funding' || transaction.type === 'wallet_topup') {
       return 'Wallet Funding';
     }
@@ -276,29 +265,29 @@ export const TransactionHistory: React.FC = () => {
       const pretty = String(raw).replace(/_/g, ' ').toLowerCase();
       return `Via ${pretty}`;
     }
-    
+
     if (transaction.type === 'transfer_sent') {
       const recipient = transaction.transfer_to_user;
       if (recipient) {
-        const name = recipient.first_name && recipient.last_name 
+        const name = recipient.first_name && recipient.last_name
           ? `${recipient.first_name} ${recipient.last_name}`
           : recipient.email;
         return `Sent to ${name}`;
       }
       return 'Funds transferred to another user';
     }
-    
+
     if (transaction.type === 'transfer_received') {
       const sender = transaction.transfer_from_user;
       if (sender) {
-        const name = sender.first_name && sender.last_name 
+        const name = sender.first_name && sender.last_name
           ? `${sender.first_name} ${sender.last_name}`
           : sender.email;
         return `Received from ${name}`;
       }
       return 'Funds received from another user';
     }
-    
+
     const parts = [];
     if (transaction.plan_duration) parts.push(transaction.plan_duration);
     if (transaction.location_name) parts.push(transaction.location_name);
@@ -307,19 +296,19 @@ export const TransactionHistory: React.FC = () => {
 
   const getAmountDisplay = (transaction: TransactionRecord) => {
     let sign = '-';
-    let color = 'text-blue-600';
-    
+    let color = darkMode ? 'text-blue-400' : 'text-blue-600';
+
     if (transaction.type === 'wallet_funding' || transaction.type === 'wallet_topup') {
       sign = '+';
-      color = 'text-green-600';
+      color = darkMode ? 'text-green-400' : 'text-green-600';
     } else if (transaction.type === 'transfer_sent') {
       sign = '-';
-      color = 'text-red-600';
+      color = darkMode ? 'text-red-400' : 'text-red-600';
     } else if (transaction.type === 'transfer_received') {
       sign = '+';
-      color = 'text-green-600';
+      color = darkMode ? 'text-green-400' : 'text-green-600';
     }
-    
+
     return (
       <span className={`font-bold ${color}`}>
         {sign}₦{transaction.amount.toLocaleString()}
@@ -329,21 +318,21 @@ export const TransactionHistory: React.FC = () => {
 
   // Filter transactions
   const filteredTransactions = transactions.filter(transaction => {
-    const typeMatch = filter === 'all' || 
+    const typeMatch = filter === 'all' ||
       (filter === 'funding' && (transaction.type === 'wallet_funding' || transaction.type === 'wallet_topup')) ||
       (filter === 'purchase' && transaction.type === 'plan_purchase') ||
       (filter === 'transfer' && (transaction.type === 'transfer_sent' || transaction.type === 'transfer_received'));
-    
+
     const statusMatch = statusFilter === 'all' || transaction.status === statusFilter;
-    
-    const searchMatch = !searchTerm || 
+
+    const searchMatch = !searchTerm ||
       getTransactionTitle(transaction).toLowerCase().includes(searchTerm.toLowerCase()) ||
       getTransactionDescription(transaction).toLowerCase().includes(searchTerm.toLowerCase()) ||
       (transaction.reference && transaction.reference.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const dateMatch = !dateFilter || 
+
+    const dateMatch = !dateFilter ||
       new Date(transaction.created_at).toISOString().split('T')[0] === dateFilter;
-    
+
     return typeMatch && statusMatch && searchMatch && dateMatch;
   });
 
@@ -364,18 +353,18 @@ export const TransactionHistory: React.FC = () => {
   if (loading) {
     return (
       <div className="space-y-6">
-        <Card className="p-6">
+        <Card className={`p-6 ${darkMode ? 'bg-zinc-900 border-zinc-800' : ''}`}>
           <div className="animate-pulse">
-            <div className="h-6 bg-gray-200 rounded w-1/3 mb-6"></div>
+            <div className={`h-6 rounded w-1/3 mb-6 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded-lg"></div>
+                  <div className={`w-12 h-12 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
                   <div className="flex-1">
-                    <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/3"></div>
+                    <div className={`h-4 rounded w-1/2 mb-2 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
+                    <div className={`h-3 rounded w-1/3 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
                   </div>
-                  <div className="h-5 bg-gray-200 rounded w-20"></div>
+                  <div className={`h-5 rounded w-20 ${darkMode ? 'bg-zinc-800' : 'bg-gray-200'}`}></div>
                 </div>
               ))}
             </div>
@@ -389,24 +378,24 @@ export const TransactionHistory: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <h2 className="text-xl font-semibold text-gray-900">Transaction History</h2>
-      <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
+        <h2 className={`text-xl font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Transaction History</h2>
+        <div className={`flex flex-wrap items-center gap-2 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
           <Wallet size={16} />
           <span>{filteredTransactions.length} transaction{filteredTransactions.length !== 1 ? 's' : ''}</span>
         </div>
       </div>
 
       {/* Filters */}
-      <Card className="p-4">
+      <Card className={`p-4 ${darkMode ? 'bg-zinc-900 border-zinc-800' : ''}`}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
               Transaction Type
             </label>
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value as any)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'border-gray-300'}`}
             >
               <option value="all">All Transactions</option>
               <option value="funding">Wallet Funding</option>
@@ -416,13 +405,13 @@ export const TransactionHistory: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
               Status
             </label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'border-gray-300'}`}
             >
               <option value="all">All Status</option>
               <option value="success">Completed</option>
@@ -439,6 +428,8 @@ export const TransactionHistory: React.FC = () => {
             onChange={setSearchTerm}
             placeholder="Search transactions..."
             icon={Search}
+            className={darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : ''}
+            labelClassName={darkMode ? 'text-gray-300' : 'text-gray-700'}
           />
 
           <Input
@@ -447,21 +438,23 @@ export const TransactionHistory: React.FC = () => {
             value={dateFilter}
             onChange={setDateFilter}
             icon={Calendar}
+            className={darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : ''}
+            labelClassName={darkMode ? 'text-gray-300' : 'text-gray-700'}
           />
         </div>
       </Card>
 
       {/* Transaction List */}
-      <Card className="p-6">
+      <Card className={`p-6 ${darkMode ? 'bg-zinc-900 border-zinc-800' : ''}`}>
         {filteredTransactions.length === 0 ? (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Receipt className="text-gray-400" size={24} />
+            <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${darkMode ? 'bg-zinc-800' : 'bg-gray-100'}`}>
+              <Receipt className={darkMode ? 'text-gray-500' : 'text-gray-400'} size={24} />
             </div>
-            <h3 className="font-medium text-gray-900 mb-2">No transactions found</h3>
-            <p className="text-gray-600">
-              {filter === 'all' 
-                ? "You haven't made any transactions yet." 
+            <h3 className={`font-medium mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>No transactions found</h3>
+            <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+              {filter === 'all'
+                ? "You haven't made any transactions yet."
                 : `No ${filter} transactions found.`}
             </p>
           </div>
@@ -473,34 +466,34 @@ export const TransactionHistory: React.FC = () => {
                 return (
                   <div
                     key={transaction.id}
-                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                    className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-lg transition-colors ${darkMode ? 'bg-zinc-800 hover:bg-zinc-700' : 'bg-gray-50 hover:bg-gray-100'}`}
                   >
                     <div className="flex items-start sm:items-center gap-4">
                       <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${getTransactionColor(transaction.type)}`}>
                         {getTransactionIcon(transaction.type, transaction.status)}
                       </div>
-                      
+
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-medium text-gray-900 flex items-center gap-2">
+                          <h4 className={`font-medium flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                             {getTransactionTitle(transaction)}
                             {isAdminDeposit(transaction) && (
                               <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 uppercase tracking-wide">Admin</span>
                             )}
                           </h4>
                           {transaction.reference && (
-                            <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded">
+                            <span className={`text-xs px-2 py-1 rounded ${darkMode ? 'bg-zinc-700 text-gray-400' : 'bg-gray-200 text-gray-500'}`}>
                               {transaction.reference.slice(-8)}
                             </span>
                           )}
                         </div>
-                        
-                        <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
+
+                        <div className={`flex flex-wrap items-center gap-2 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                           {getStatusIcon(transaction.status)}
                           <span>{getStatusText(transaction.status)}</span>
-                          <span className="text-gray-400">•</span>
+                          <span className={darkMode ? 'text-gray-600' : 'text-gray-400'}>•</span>
                           <span>{getTransactionDescription(transaction)}</span>
-                          <span className="text-gray-400">•</span>
+                          <span className={darkMode ? 'text-gray-600' : 'text-gray-400'}>•</span>
                           <span>
                             {createdAt.toLocaleDateString('en-US', {
                               month: 'short',
@@ -512,7 +505,7 @@ export const TransactionHistory: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="text-left sm:text-right">
                       <div className="mb-1">
                         {getAmountDisplay(transaction)}
@@ -528,30 +521,32 @@ export const TransactionHistory: React.FC = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
-                <p className="text-sm text-gray-600">
+              <div className={`flex items-center justify-between mt-6 pt-4 border-t ${darkMode ? 'border-zinc-800' : 'border-gray-200'}`}>
+                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   Showing {startIndex + 1} to {Math.min(endIndex, filteredTransactions.length)} of {filteredTransactions.length} transactions
                 </p>
-                
+
                 <div className="flex items-center gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={handlePreviousPage}
                     disabled={currentPage === 1}
+                    className={darkMode ? 'bg-transparent border-zinc-700 text-white hover:bg-zinc-800' : ''}
                   >
                     Previous
                   </Button>
-                  
-                  <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded text-sm font-medium">
+
+                  <span className={`px-3 py-1 rounded text-sm font-medium ${darkMode ? 'bg-blue-900/20 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
                     {currentPage} of {totalPages}
                   </span>
-                  
+
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={handleNextPage}
                     disabled={currentPage === totalPages}
+                    className={darkMode ? 'bg-transparent border-zinc-700 text-white hover:bg-zinc-800' : ''}
                   >
                     Next
                   </Button>
