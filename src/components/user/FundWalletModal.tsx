@@ -4,7 +4,7 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { X, Wallet, CreditCard, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { initializePaystackCheckout, getActivePaymentGateway, verifyPaystackPayment } from '../../utils/paystack';
+import { initializePaystackCheckout, verifyPaystackPayment } from '../../utils/paystack';
 import { supabase } from '../../utils/supabase';
 
 interface FundWalletModalProps {
@@ -27,8 +27,7 @@ export const FundWalletModal: React.FC<FundWalletModalProps> = ({ isOpen, onClos
     const [amount, setAmount] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [activeGateway, setActiveGateway] = useState<'flutterwave' | 'paystack' | 'both'>('flutterwave');
-    const [selectedGateway, setSelectedGateway] = useState<'flutterwave' | 'paystack'>('flutterwave');
+    // Paystack is the only payment gateway
     const [fundingSettings, setFundingSettings] = useState<FundingSettings | null>(null);
     const [step, setStep] = useState<'amount' | 'processing' | 'success'>('amount');
 
@@ -64,10 +63,7 @@ export const FundWalletModal: React.FC<FundWalletModalProps> = ({ isOpen, onClos
                 });
             }
 
-            // Load active gateway
-            const gateway = await getActivePaymentGateway();
-            setActiveGateway(gateway);
-            setSelectedGateway(gateway === 'both' ? 'paystack' : gateway);
+            // Paystack is the only active gateway
         } catch (err) {
             console.error('Error loading settings:', err);
         }
@@ -135,8 +131,11 @@ export const FundWalletModal: React.FC<FundWalletModalProps> = ({ isOpen, onClos
                     setLoading(false);
                 },
                 onClose: () => {
+                    // Don't reset immediately - user may be making a bank transfer
+                    // and will return to verify the payment
                     setLoading(false);
-                    setStep('amount');
+                    // Keep the 'processing' step so user can see instructions
+                    // They can close the modal manually if they want to cancel
                 }
             });
         } catch (err: any) {
@@ -148,13 +147,7 @@ export const FundWalletModal: React.FC<FundWalletModalProps> = ({ isOpen, onClos
     };
 
     const handleSubmit = () => {
-        if (selectedGateway === 'paystack') {
-            handlePaystackPayment();
-        } else {
-            // Flutterwave flow - redirect to virtual account or inline checkout
-            // For now, show a message to use virtual account
-            setError('Please use your virtual account for Flutterwave funding.');
-        }
+        handlePaystackPayment();
     };
 
     if (!isOpen) return null;
@@ -195,36 +188,6 @@ export const FundWalletModal: React.FC<FundWalletModalProps> = ({ isOpen, onClos
                     </div>
                 ) : (
                     <div className="space-y-4">
-                        {/* Gateway Selection (if both available) */}
-                        {activeGateway === 'both' && (
-                            <div>
-                                <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    Payment Method
-                                </label>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <button
-                                        onClick={() => setSelectedGateway('paystack')}
-                                        className={`p-3 rounded-lg border-2 transition-all ${selectedGateway === 'paystack'
-                                            ? 'border-[#FF5F00] bg-orange-50'
-                                            : darkMode ? 'border-zinc-700 bg-zinc-800' : 'border-gray-200'
-                                            }`}
-                                    >
-                                        <CreditCard className={`mx-auto mb-1 ${selectedGateway === 'paystack' ? 'text-[#FF5F00]' : darkMode ? 'text-gray-400' : 'text-gray-500'}`} size={20} />
-                                        <span className={`text-sm font-medium ${selectedGateway === 'paystack' ? 'text-[#FF5F00]' : darkMode ? 'text-white' : 'text-gray-700'}`}>Paystack</span>
-                                    </button>
-                                    <button
-                                        onClick={() => setSelectedGateway('flutterwave')}
-                                        className={`p-3 rounded-lg border-2 transition-all ${selectedGateway === 'flutterwave'
-                                            ? 'border-orange-500 bg-orange-50'
-                                            : darkMode ? 'border-zinc-700 bg-zinc-800' : 'border-gray-200'
-                                            }`}
-                                    >
-                                        <CreditCard className={`mx-auto mb-1 ${selectedGateway === 'flutterwave' ? 'text-orange-500' : darkMode ? 'text-gray-400' : 'text-gray-500'}`} size={20} />
-                                        <span className={`text-sm font-medium ${selectedGateway === 'flutterwave' ? 'text-orange-500' : darkMode ? 'text-white' : 'text-gray-700'}`}>Flutterwave</span>
-                                    </button>
-                                </div>
-                            </div>
-                        )}
 
                         {/* Amount Input */}
                         <div>
@@ -298,7 +261,7 @@ export const FundWalletModal: React.FC<FundWalletModalProps> = ({ isOpen, onClos
                             ) : (
                                 <div className="flex items-center gap-2">
                                     <CreditCard size={16} />
-                                    Pay with {selectedGateway === 'paystack' ? 'Paystack' : 'Flutterwave'}
+                                    Pay with Paystack
                                 </div>
                             )}
                         </Button>
