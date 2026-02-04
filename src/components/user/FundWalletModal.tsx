@@ -181,10 +181,40 @@ export const FundWalletModal: React.FC<FundWalletModalProps> = ({ isOpen, onClos
                         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Your wallet has been credited.</p>
                     </div>
                 ) : step === 'processing' ? (
-                    <div className="text-center py-8">
-                        <Loader2 className="w-12 h-12 text-[#FF5F00] mx-auto mb-4 animate-spin" />
-                        <h4 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Processing Payment...</h4>
-                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Please complete the payment in the popup window.</p>
+                    <div className="text-center py-6">
+                        {loading ? (
+                            <>
+                                <Loader2 className="w-12 h-12 text-[#FF5F00] mx-auto mb-4 animate-spin" />
+                                <h4 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Processing Payment...</h4>
+                                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Please complete the payment in the popup window.</p>
+                            </>
+                        ) : (
+                            <>
+                                <CheckCircle className="w-12 h-12 text-[#FF5F00] mx-auto mb-4" />
+                                <h4 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Payment Submitted!</h4>
+                                <p className={`text-sm mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    If you made a bank transfer, your wallet will be credited automatically once the payment is confirmed (usually within 1-5 minutes).
+                                </p>
+                                <div className="space-y-3">
+                                    <Button
+                                        onClick={() => {
+                                            onSuccess();
+                                            onClose();
+                                        }}
+                                        className="w-full bg-[#FF5F00] hover:bg-[#E65600]"
+                                    >
+                                        <CheckCircle size={16} className="mr-2" />
+                                        Done - Close Window
+                                    </Button>
+                                    <button
+                                        onClick={() => setStep('amount')}
+                                        className={`w-full py-2 text-sm ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`}
+                                    >
+                                        Make Another Payment
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 ) : (
                     <div className="space-y-4">
