@@ -103,7 +103,7 @@ export const initializePaystackCheckout = async (options: PaystackCheckoutOption
     handler.openIframe();
 };
 
-// Helper to load paystack inline script
+// Helper to load paystack inline script with timeout and polling
 const loadPaystackScript = (): Promise<void> => {
     return new Promise((resolve, reject) => {
         if ((window as any).PaystackPop) {
@@ -111,13 +111,57 @@ const loadPaystackScript = (): Promise<void> => {
             return;
         }
 
+        // Check if script is already present but loading
+        const existingScript = document.querySelector('script[src="https://js.paystack.co/v1/inline.js"]');
+        if (existingScript) {
+            // Wait for it to load
+            existingScript.addEventListener('load', () => checkPaystackAvailability(resolve, reject));
+            existingScript.addEventListener('error', () => reject(new Error('Failed to load Paystack script')));
+            return;
+        }
+
         const script = document.createElement('script');
         script.src = 'https://js.paystack.co/v1/inline.js';
         script.async = true;
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error('Failed to load Paystack script'));
+
+        const cleanup = () => {
+            clearTimeout(timeoutId);
+            script.removeEventListener('load', onLoad);
+            script.removeEventListener('error', onError);
+        };
+
+        const onLoad = () => {
+            cleanup();
+            checkPaystackAvailability(resolve, reject);
+        };
+
+        const onError = () => {
+            cleanup();
+            reject(new Error('Failed to load Paystack script: Network error'));
+        };
+
+        const timeoutId = setTimeout(() => {
+            cleanup();
+            reject(new Error('Failed to load Paystack script: Timeout'));
+        }, 15000); // 15 seconds timeout
+
+        script.addEventListener('load', onLoad);
+        script.addEventListener('error', onError);
         document.head.appendChild(script);
     });
+};
+
+// Poll for PaystackPop availability
+const checkPaystackAvailability = (resolve: () => void, reject: (err: Error) => void, attempts = 0) => {
+    if ((window as any).PaystackPop) {
+        resolve();
+    } else {
+        if (attempts < 10) {
+            setTimeout(() => checkPaystackAvailability(resolve, reject, attempts + 1), 500);
+        } else {
+            reject(new Error('Paystack initialized but PaystackPop object not found'));
+        }
+    }
 };
 
 // Verify payment on server side (should be called after successful payment)

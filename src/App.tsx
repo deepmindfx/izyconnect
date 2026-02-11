@@ -87,7 +87,10 @@ function App() {
     const entries = performance.getEntriesByType("navigation");
     const isRefresh = entries.length > 0 && (entries[0] as PerformanceNavigationTiming).type === "reload";
 
-    if (isRefresh) {
+    // Don't clear session on quickbuy page even if refreshed
+    const isQuickBuy = window.location.pathname === '/quickbuy';
+
+    if (isRefresh && !isQuickBuy) {
       setIsHandlingRefresh(true);
       console.log('Page refreshed - clearing all data and redirecting to login...');
 
