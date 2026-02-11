@@ -16,7 +16,7 @@ interface QuickBuyRequest {
 }
 
 serve(async (req: Request) => {
-    // Handle CORS preflight
+    // 1. Handle CORS preflight - Critical for browser requests
     if (req.method === "OPTIONS") {
         return new Response("ok", { headers: corsHeaders });
     }
@@ -29,7 +29,7 @@ serve(async (req: Request) => {
         const body: QuickBuyRequest = await req.json();
         const { reference, plan_id, location_id, email, amount } = body;
 
-        console.log("Quick buy request:", JSON.stringify(body));
+        console.log("Quick buy request:", JSON.stringify({ reference, plan_id, location_id, amount })); // Don't log PII if possible, but email is system-generated now
 
         if (!reference || !plan_id || !location_id || !email) {
             return new Response(
@@ -38,7 +38,7 @@ serve(async (req: Request) => {
             );
         }
 
-        // 1. Idempotency check — if already processed, return the existing result
+        // 2. Idempotency check
         const { data: existingPurchase } = await supabase
             .from("quick_purchases")
             .select("*")
@@ -46,7 +46,6 @@ serve(async (req: Request) => {
             .single();
 
         if (existingPurchase && existingPurchase.status === "completed") {
-            console.log("Already processed reference:", reference);
             return new Response(
                 JSON.stringify({
                     success: true,
@@ -56,11 +55,11 @@ serve(async (req: Request) => {
                     },
                     already_processed: true,
                 }),
-                { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+                { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
             );
         }
 
-        // 2. Verify the payment with Paystack API
+        // 3. Verify Payment
         const { data: secretKeyData } = await supabase
             .from("admin_settings")
             .select("value")
@@ -68,45 +67,38 @@ serve(async (req: Request) => {
             .single();
 
         if (!secretKeyData?.value) {
+            console.error("Paystack secret key missing");
             return new Response(
-                JSON.stringify({ error: "Paystack not configured" }),
+                JSON.stringify({ error: "Server misconfiguration: Paystack key missing" }),
                 { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
             );
         }
 
         const paystackVerifyRes = await fetch(
             `https://api.paystack.co/transaction/verify/${reference}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${secretKeyData.value}`,
-                },
-            }
+            { headers: { Authorization: `Bearer ${secretKeyData.value}` } }
         );
 
         const paystackData = await paystackVerifyRes.json();
-        console.log("Paystack verification:", JSON.stringify(paystackData));
 
-        if (
-            !paystackData.status ||
-            paystackData.data?.status !== "success"
-        ) {
-            // Create failed record
+        if (!paystackData.status || paystackData.data?.status !== "success") {
+            // Log failure but don't crash
             await supabase.from("quick_purchases").upsert({
                 paystack_reference: reference,
                 email,
                 plan_id,
                 location_id,
-                amount: amount / 100, // kobo to naira
+                amount: amount / 100,
                 status: "failed",
             }, { onConflict: "paystack_reference" });
 
             return new Response(
-                JSON.stringify({ error: "Payment verification failed", details: paystackData.message }),
+                JSON.stringify({ error: "Payment verification failed", details: paystackData.message || "Unknown error" }),
                 { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
             );
         }
 
-        // 3. Get plan details for expiry calculation
+        // 4. Get Plan
         const { data: plan } = await supabase
             .from("plans")
             .select("*")
@@ -120,7 +112,7 @@ serve(async (req: Request) => {
             );
         }
 
-        // 4. Find an available credential
+        // 5. Assign Credential
         const { data: credential, error: credError } = await supabase
             .from("credential_pools")
             .select("*")
@@ -131,78 +123,59 @@ serve(async (req: Request) => {
             .single();
 
         if (credError || !credential) {
-            console.error("No available credentials:", credError);
+            console.error("Credential assignment error:", credError);
             return new Response(
-                JSON.stringify({ error: "No credentials available for this plan/location. Please try again later." }),
+                JSON.stringify({ error: "No credentials available. Contact support with reference: " + reference }),
                 { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
             );
         }
 
-        // 5. Mark credential as used
         const { error: updateCredError } = await supabase
             .from("credential_pools")
-            .update({
-                status: "used",
-                assigned_at: new Date().toISOString(),
-            })
+            .update({ status: "used", assigned_at: new Date().toISOString() })
             .eq("id", credential.id)
-            .eq("status", "available"); // Optimistic lock
+            .eq("status", "available");
 
         if (updateCredError) {
-            console.error("Failed to assign credential:", updateCredError);
+            console.error("Credential update error:", updateCredError);
             return new Response(
-                JSON.stringify({ error: "Failed to assign credential. Please try again." }),
+                JSON.stringify({ error: "Failed to assign credential. Try again." }),
                 { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
             );
         }
 
-        // 6. Calculate expiry
-        const expiresAt = new Date(
-            Date.now() + plan.duration_hours * 60 * 60 * 1000
-        ).toISOString();
+        // 6. Create Purchase Record
+        const expiresAt = new Date(Date.now() + plan.duration_hours * 60 * 60 * 1000).toISOString();
 
-        // 7. Create/update the quick purchase record
-        const { data: purchase, error: purchaseError } = await supabase
+        const { error: purchaseError } = await supabase
             .from("quick_purchases")
-            .upsert(
-                {
-                    paystack_reference: reference,
-                    email,
-                    plan_id,
-                    location_id,
-                    credential_id: credential.id,
-                    amount: (paystackData.data?.amount || amount) / 100, // kobo to naira
-                    mikrotik_username: credential.username,
-                    mikrotik_password: credential.password,
-                    status: "completed",
-                    expires_at: expiresAt,
-                },
-                { onConflict: "paystack_reference" }
-            )
-            .select()
-            .single();
+            .upsert({
+                paystack_reference: reference,
+                email,
+                plan_id,
+                location_id,
+                credential_id: credential.id,
+                amount: (paystackData.data?.amount || amount) / 100,
+                mikrotik_username: credential.username,
+                mikrotik_password: credential.password,
+                status: "completed",
+                expires_at: expiresAt,
+            }, { onConflict: "paystack_reference" });
 
-        if (purchaseError) {
-            console.error("Failed to create purchase record:", purchaseError);
-            // Still return credentials since payment was verified and credential was assigned
-        }
-
-        console.log("Quick buy completed successfully:", reference);
+        if (purchaseError) console.error("Purchase record creation failed:", purchaseError);
 
         return new Response(
             JSON.stringify({
                 success: true,
-                credential: {
-                    username: credential.username,
-                    password: credential.password,
-                },
+                credential: { username: credential.username, password: credential.password },
                 plan_name: plan.name,
                 expires_at: expiresAt,
             }),
-            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
+
     } catch (error) {
-        console.error("Quick buy error:", error);
+        console.error("Edge function error:", error);
         return new Response(
             JSON.stringify({ error: "Internal server error", details: error.message }),
             { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }

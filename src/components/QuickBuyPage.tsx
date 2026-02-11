@@ -96,26 +96,41 @@ export const QuickBuyPage: React.FC = () => {
 
                     try {
                         // Call edge function to verify & assign credential
-                        const { data, error: fnError } = await supabase.functions.invoke('quickbuy-complete', {
-                            body: {
+                        // Using direct fetch to avoid potential client-side issues with supabase-js invoke
+                        const {
+                            VITE_SUPABASE_URL,
+                            VITE_SUPABASE_ANON_KEY
+                        } = import.meta.env;
+
+                        const functionUrl = `${VITE_SUPABASE_URL}/functions/v1/quickbuy-complete`;
+
+                        const response = await fetch(functionUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${VITE_SUPABASE_ANON_KEY}`,
+                            },
+                            body: JSON.stringify({
                                 reference,
                                 plan_id: selectedPlan.id,
                                 location_id: selectedLocation.id,
                                 email,
                                 amount: selectedPlan.price * 100,
-                            },
+                            }),
                         });
 
-                        if (fnError) {
-                            throw new Error(fnError.message || 'Failed to complete purchase');
+                        const responseData = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(responseData.error || responseData.details || 'Failed to complete purchase');
                         }
 
-                        if (data?.success && data?.credential) {
-                            setCredential(data.credential);
-                            setExpiresAt(data.expires_at || null);
+                        if (responseData.success && responseData.credential) {
+                            setCredential(responseData.credential);
+                            setExpiresAt(responseData.expires_at || null);
                             setStep('success');
                         } else {
-                            throw new Error(data?.error || 'Failed to assign credentials');
+                            throw new Error(responseData.error || 'Failed to assign credentials');
                         }
                     } catch (err: any) {
                         console.error('Quick buy completion error:', err);
@@ -385,20 +400,7 @@ export const QuickBuyPage: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Email Input */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Email Address
-                            </label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="your@email.com"
-                                className="w-full px-4 py-3.5 bg-white/[0.06] border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 transition-all"
-                            />
-                            <p className="text-xs text-gray-500 mt-1.5">We'll send your receipt to this email.</p>
-                        </div>
+
 
                         {/* Pay Button */}
                         <button
