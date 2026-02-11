@@ -88,6 +88,13 @@ export const LandingPage: React.FC = () => {
               Create Free Account
               <ChevronRight className="w-4 h-4" />
             </a>
+            <a
+              href="/quickbuy"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-semibold text-white bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transition-all shadow-xl shadow-green-500/20 hover:shadow-green-500/30 hover:-translate-y-1"
+            >
+              <Zap className="w-4 h-4" />
+              Quick Buy — No Signup
+            </a>
             <button
               onClick={handleDownloadClick}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-base font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer"

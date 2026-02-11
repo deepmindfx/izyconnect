@@ -179,7 +179,7 @@ export const UserDashboard: React.FC = () => {
             <BottomNavigation
               activePage={activePage}
               onPageChange={setActivePage}
-              onQuickBuy={() => setShowQuickBuyModal(true)}
+              onQuickBuy={() => window.location.href = '/quickbuy'}
               darkMode={isDark}
             />
           </div>

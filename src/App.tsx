@@ -8,6 +8,7 @@ import { UserDashboard } from './components/user/UserDashboard';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { TermsOfService } from './components/TermsOfService';
+import { QuickBuyPage } from './components/QuickBuyPage';
 import { initPWASessionManagement, debugStorage } from './utils/pwaUtils';
 import { clearSessionAndRedirect } from './utils/sessionClear';
 
@@ -40,6 +41,9 @@ function AppContent() {
   }, []);
 
   // Public routes that don't require auth and should be visible even if logged in
+  if (path === '/quickbuy') {
+    return <QuickBuyPage />;
+  }
   if (path === '/privacy') {
     return <PrivacyPolicy />;
   }

@@ -35,3 +35,8 @@
   from = "/settings/*"
   to = "/index.html"
   status = 200
+
+[[redirects]]
+  from = "/quickbuy"
+  to = "/index.html"
+  status = 200
