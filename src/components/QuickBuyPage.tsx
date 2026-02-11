@@ -402,6 +402,21 @@ export const QuickBuyPage: React.FC = () => {
 
 
 
+                        {/* Email Input */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                                Email Address
+                            </label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="your@email.com"
+                                className="w-full px-4 py-3.5 bg-white/[0.06] border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 transition-all"
+                            />
+                            <p className="text-xs text-gray-500 mt-1.5">We'll send your receipt to this email.</p>
+                        </div>
+
                         {/* Pay Button */}
                         <button
                             onClick={handlePayment}
