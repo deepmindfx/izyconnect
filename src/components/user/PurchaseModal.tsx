@@ -55,10 +55,10 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({ plan, onClose }) =
         setIsProcessing(false);
         return;
       }
-      
+
       // Update wallet balance after successful purchase
       await updateWalletBalance(-plan.price);
-      
+
       setPurchase(newPurchase);
       setShowReceipt(true);
     } catch (error) {
@@ -141,7 +141,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({ plan, onClose }) =
                     <div className="w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center text-white text-xs font-bold mt-0.5">3</div>
                     <p>Click "Start Plan" to activate your internet access</p>
                   </div>
-                  
+
                   {/* Credentials Card */}
                   <div className="mt-4 bg-white p-4 rounded-xl border border-amber-300">
                     <p className="text-sm font-bold text-amber-900 mb-3">Your Login Credentials</p>
@@ -150,10 +150,12 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({ plan, onClose }) =
                         <span className="text-amber-800 font-medium">Username:</span>
                         <span className="font-mono font-bold text-gray-900 bg-gray-100 px-2 py-1 rounded">{purchase?.mikrotikCredentials?.username}</span>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-amber-800 font-medium">Password:</span>
-                        <span className="font-mono font-bold text-gray-900 bg-gray-100 px-2 py-1 rounded">{purchase?.mikrotikCredentials?.password}</span>
-                      </div>
+                      {purchase?.mikrotikCredentials?.password && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-amber-800 font-medium">Password:</span>
+                          <span className="font-mono font-bold text-gray-900 bg-gray-100 px-2 py-1 rounded">{purchase?.mikrotikCredentials?.password}</span>
+                        </div>
+                      )}
                     </div>
                     <p className="text-xs text-amber-700 mt-3 text-center">
                       Use these after tapping "Start Plan" on the home screen.
@@ -165,16 +167,16 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({ plan, onClose }) =
           </div>
 
           <div className="p-6 pt-4 border-t border-gray-100 bg-gray-50">
-            <button 
-              onClick={handleClose} 
+            <button
+              onClick={handleClose}
               className="w-full py-4 px-6 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-lg rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-green-500/25 transform hover:-translate-y-1"
             >
               Go to Home
             </button>
-                      </div>
           </div>
         </div>
-      );
+      </div>
+    );
   }
 
   return (
@@ -187,8 +189,8 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({ plan, onClose }) =
               <h2 className="text-2xl font-bold text-white tracking-tight">Purchase Plan</h2>
               <p className="text-blue-100 text-sm mt-1">Select location and confirm</p>
             </div>
-            <button 
-              onClick={handleClose} 
+            <button
+              onClick={handleClose}
               className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200"
             >
               ✕
@@ -215,65 +217,63 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({ plan, onClose }) =
               </div>
             </div>
 
-          <div>
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Select Location</h3>
-            <div className="space-y-3">
-              {locations.filter(loc => loc.isActive).map((location) => (
-                <label
-                  key={location.id}
-                  className={`flex items-center p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 ${
-                    selectedLocation?.id === location.id
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Select Location</h3>
+              <div className="space-y-3">
+                {locations.filter(loc => loc.isActive).map((location) => (
+                  <label
+                    key={location.id}
+                    className={`flex items-center p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 ${selectedLocation?.id === location.id
                       ? 'border-blue-500 bg-blue-50 shadow-lg shadow-blue-500/20'
                       : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50/30'
-                  }`}
-                >
-                  <div className={`w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center ${
-                    selectedLocation?.id === location.id
+                      }`}
+                  >
+                    <div className={`w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center ${selectedLocation?.id === location.id
                       ? 'border-blue-500 bg-blue-500'
                       : 'border-gray-300'
-                  }`}>
-                    {selectedLocation?.id === location.id && (
-                      <div className="w-2 h-2 bg-white rounded-full"></div>
-                    )}
-                  </div>
-                  <input
-                    type="radio"
-                    name="location"
-                    value={location.id}
-                    checked={selectedLocation?.id === location.id}
-                    onChange={() => setSelectedLocation(location)}
-                    className="sr-only"
-                  />
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-900">{location.name}</p>
-                    <p className="text-sm text-gray-600">WiFi: <span className="font-mono font-medium">{location.wifiName}</span></p>
-                  </div>
-                  {selectedLocation?.id === location.id && (
-                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs">✓</span>
+                      }`}>
+                      {selectedLocation?.id === location.id && (
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                      )}
                     </div>
-                  )}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {selectedLocation && (
-            <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-2xl border border-amber-200">
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-xs font-bold">!</span>
-                </div>
-                <div>
-                  <p className="text-sm text-amber-800 font-medium">
-                    <strong>Important:</strong> Make sure you're connected to the WiFi: 
-                  </p>
-                  <p className="text-sm text-amber-700 font-mono mt-1">"{selectedLocation.wifiName}"</p>
-                  <p className="text-sm text-amber-700 mt-1">before purchasing your plan.</p>
-                </div>
+                    <input
+                      type="radio"
+                      name="location"
+                      value={location.id}
+                      checked={selectedLocation?.id === location.id}
+                      onChange={() => setSelectedLocation(location)}
+                      className="sr-only"
+                    />
+                    <div className="flex-1">
+                      <p className="font-bold text-gray-900">{location.name}</p>
+                      <p className="text-sm text-gray-600">WiFi: <span className="font-mono font-medium">{location.wifiName}</span></p>
+                    </div>
+                    {selectedLocation?.id === location.id && (
+                      <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    )}
+                  </label>
+                ))}
               </div>
             </div>
-          )}
+
+            {selectedLocation && (
+              <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-2xl border border-amber-200">
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-white text-xs font-bold">!</span>
+                  </div>
+                  <div>
+                    <p className="text-sm text-amber-800 font-medium">
+                      <strong>Important:</strong> Make sure you're connected to the WiFi:
+                    </p>
+                    <p className="text-sm text-amber-700 font-mono mt-1">"{selectedLocation.wifiName}"</p>
+                    <p className="text-sm text-amber-700 mt-1">before purchasing your plan.</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -306,7 +306,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({ plan, onClose }) =
                 )}
               </button>
             </div>
-            
+
             {/* Status Messages */}
             {user && user.walletBalance < plan.price && (
               <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
@@ -340,9 +340,9 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({ plan, onClose }) =
                 </div>
               </div>
             )}
-                      </div>
           </div>
         </div>
+      </div>
 
       <ConfirmationModal
         isOpen={showConfirmation}

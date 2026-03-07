@@ -89,8 +89,8 @@ const LocationCard: React.FC<LocationCardProps> = ({
 
         <div className="flex flex-wrap items-center gap-2">
           <span className={`px-2 py-1 rounded-full text-xs ${location.isActive
-              ? 'bg-orange-100 text-orange-700'
-              : 'bg-gray-100 text-gray-700'
+            ? 'bg-orange-100 text-orange-700'
+            : 'bg-gray-100 text-gray-700'
             }`}>
             {location.isActive ? 'Active' : 'Inactive'}
           </span>
@@ -125,11 +125,11 @@ const LocationCard: React.FC<LocationCardProps> = ({
       <div className="mt-4 grid grid-cols-2 gap-4">
         <div className="bg-gray-50 p-3 rounded-lg">
           <p className="text-sm text-gray-600">Username</p>
-          <p className="font-mono text-gray-900">{location.username}</p>
+          <p className="font-mono text-gray-900">{location.username || 'Not set'}</p>
         </div>
         <div className="bg-gray-50 p-3 rounded-lg">
           <p className="text-sm text-gray-600">Password</p>
-          <p className="font-mono text-gray-900">{location.password}</p>
+          <p className="font-mono text-gray-900">{location.password || 'None'}</p>
         </div>
       </div>
     </Card>
@@ -138,7 +138,7 @@ const LocationCard: React.FC<LocationCardProps> = ({
 
 interface LocationFormProps {
   location?: Location;
-  onSubmit: (location: Omit<Location, 'id'>) => void;
+  onSubmit: (locationData: { name: string; wifiName: string; isActive: boolean }) => void;
   onCancel: () => void;
 }
 

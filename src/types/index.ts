@@ -36,6 +36,8 @@ export interface Location {
   name: string;
   wifiName: string;
   isActive: boolean;
+  username?: string;
+  password?: string;
   createdAt: string;
   updatedAt: string;
 }

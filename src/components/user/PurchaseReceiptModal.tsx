@@ -4,7 +4,7 @@ import { Button } from '../ui/Button';
 import { Purchase } from '../../types';
 import { useData } from '../../contexts/DataContext';
 import { useAuth } from '../../contexts/AuthContext';
-import { X, Download, Wifi, Calendar, MapPin, User, CreditCard } from 'lucide-react';
+import { X, Download, Wifi, Calendar, MapPin, CreditCard } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 
 interface PurchaseReceiptModalProps {
@@ -140,12 +140,14 @@ export const PurchaseReceiptModal: React.FC<PurchaseReceiptModalProps> = ({ purc
                         {purchase.mikrotikCredentials.username}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className={darkMode ? 'text-orange-300' : 'text-orange-700'}>Password:</span>
-                      <span className={`font-mono px-2 py-1 rounded ${darkMode ? 'bg-black text-orange-200' : 'bg-white text-orange-900'}`}>
-                        {purchase.mikrotikCredentials.password}
-                      </span>
-                    </div>
+                    {purchase.mikrotikCredentials.password && (
+                      <div className="flex justify-between">
+                        <span className={darkMode ? 'text-orange-300' : 'text-orange-700'}>Password:</span>
+                        <span className={`font-mono px-2 py-1 rounded ${darkMode ? 'bg-black text-orange-200' : 'bg-white text-orange-900'}`}>
+                          {purchase.mikrotikCredentials.password}
+                        </span>
+                      </div>
+                    )}
                   </>
                 ) : (
                   <div className={`p-2 rounded ${darkMode ? 'bg-yellow-900/30' : 'bg-yellow-100'}`}>

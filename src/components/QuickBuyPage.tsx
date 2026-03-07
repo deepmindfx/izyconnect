@@ -480,24 +480,26 @@ export const QuickBuyPage: React.FC = () => {
                             </div>
 
                             {/* Password */}
-                            <div className="bg-black/30 rounded-xl p-4">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-xs text-gray-400 mb-1">Password</p>
-                                        <p className="text-xl font-mono font-bold text-white">{credential.password}</p>
+                            {credential.password && (
+                                <div className="bg-black/30 rounded-xl p-4">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <p className="text-xs text-gray-400 mb-1">Password</p>
+                                            <p className="text-xl font-mono font-bold text-white">{credential.password}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => handleCopy(credential.password, 'password')}
+                                            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                                        >
+                                            {copiedField === 'password' ? (
+                                                <Check className="w-4 h-4 text-green-400" />
+                                            ) : (
+                                                <Copy className="w-4 h-4 text-gray-400" />
+                                            )}
+                                        </button>
                                     </div>
-                                    <button
-                                        onClick={() => handleCopy(credential.password, 'password')}
-                                        className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
-                                    >
-                                        {copiedField === 'password' ? (
-                                            <Check className="w-4 h-4 text-green-400" />
-                                        ) : (
-                                            <Copy className="w-4 h-4 text-gray-400" />
-                                        )}
-                                    </button>
                                 </div>
-                            </div>
+                            )}
 
                             {expiresAt && (
                                 <div className="flex items-center gap-2 text-sm text-gray-400">
